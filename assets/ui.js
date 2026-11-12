@@ -16,3 +16,10 @@
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
   }
 })();
+// Parallaxe: Bergketten bewegen sich leicht mit dem Mauszeiger
+(function(){
+  var hero=document.querySelector(".hero");
+  if(!hero||window.matchMedia("(prefers-reduced-motion: reduce)").matches||!window.matchMedia("(pointer:fine)").matches)return;
+  hero.addEventListener("pointermove",function(e){var r=hero.getBoundingClientRect();hero.style.setProperty("--px",((e.clientX-r.left)/r.width-.5).toFixed(3));hero.style.setProperty("--py",((e.clientY-r.top)/r.height-.5).toFixed(3));});
+  hero.addEventListener("pointerleave",function(){hero.style.setProperty("--px",0);hero.style.setProperty("--py",0);});
+})();

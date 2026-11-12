@@ -25,7 +25,7 @@
       <div style="font:500 13px/1.5 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Davos · Klosters · Arosa · Flüela · St. Antönien</div>
       <h1 style="margin:0;font:700 52px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.02em;max-width:760px">Deine nächste Skitour beginnt hier</h1>
       <p class="lead">Entdecke Gipfel rund um Davos auf der interaktiven Karte – vom gemütlichen Einsteigerberg bis zum perfekten 40°-Powder-Hang.</p>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="suche.html">Touren suchen</a><a class="cta ghost" href="#karte">Zur Karte</a><a class="cta ghost" href="#powder">❄ Powder-Finder</a></div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="suche.html">Touren suchen</a><a class="cta ghost" href="#karte">Zur Karte</a><a class="cta ghost" href="#powder">❄ Powder-Finder</a><button type="button" class="cta ghost" id="rnd">Zufallstour</button></div>
     </div>
     <svg class="range" viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <circle cx="1240" cy="46" r="20" fill="#E0B771" opacity=".85"/>
@@ -41,8 +41,37 @@
     <section class="sect" id="karte">
       <span class="eyebrow">Interaktive Karte</span>
       <h2>Tourenkarte</h2>
-      <p>Alle Touren auf einen Blick. Klicke auf einen Gipfel für Details. Die Farbe zeigt die Schwierigkeit, ❄ markiert Powder-Hänge (goldene Linie = Hang). <strong><span id="mapCount"></span> Touren</strong> angezeigt.</p>
-      <div class="chips" id="mapFams" aria-label="Nach Schwierigkeit filtern"></div>
+      <div class="tabs" role="tablist" aria-label="Kartenansicht">
+        <button type="button" role="tab" id="tabT" aria-selected="true" aria-controls="ctlT">Touren</button>
+        <button type="button" role="tab" id="tabH" aria-selected="false" aria-controls="ctlH">❄ Powder-Explorer</button>
+      </div>
+      <div id="ctlT" role="tabpanel" aria-labelledby="tabT" class="ctl">
+        <p>Klicke auf einen Gipfel für Details. Die Farbe zeigt die Schwierigkeit, ❄ markiert Touren mit Powder-Hang (goldene Linie = Falllinie des Hangs).</p>
+        <div class="chips" id="mapFams" aria-label="Nach Schwierigkeit filtern"></div>
+      </div>
+      <div id="ctlH" role="tabpanel" aria-labelledby="tabH" class="ctl" hidden>
+        <p>Alle Hänge aus der Geländeanalyse. Stelle Hangneigung, Höhendifferenz und Exposition ein – die Karte reagiert sofort. Klicke auf einen Hang für das Hangprofil.</p>
+        <div class="explorer">
+          <div class="exc">
+            <div class="exh"><span>Hangneigung</span><output id="oN"></output></div>
+            <label class="rl"><span>von</span><input type="range" id="nMin" min="34" max="45" step="0.5" value="34"></label>
+            <label class="rl"><span>bis</span><input type="range" id="nMax" min="34" max="45" step="0.5" value="45"></label>
+            <div class="exh" style="margin-top:8px"><label for="hMin">Min. Höhendifferenz</label><output id="oH"></output></div>
+            <input type="range" id="hMin" min="200" max="450" step="10" value="200">
+            <button type="button" class="btn" id="hReset" style="margin-top:10px">Zurücksetzen</button>
+          </div>
+          <div class="exc exr">
+            <div class="exh"><span>Exposition</span></div>
+            <div id="hRose"></div>
+          </div>
+          <div class="exc">
+            <div class="exh"><span>Längste Hänge</span></div>
+            <ol id="hTop" class="toplist"></ol>
+          </div>
+        </div>
+        <div class="leg"><span><i style="background:#E0B771"></i>unter 37°</span><span><i style="background:#C77A14"></i>37–39,5°</span><span><i style="background:#B83232"></i>ab 39,5°</span></div>
+      </div>
+      <p class="mapinfo"><strong id="mapCount"></strong> <span id="mapUnit"></span> angezeigt</p>
       <div id="map" role="region" aria-label="Interaktive Karte der Skitouren"></div>
       <p style="font-size:13px">Die Marker sitzen genau auf dem Gipfel (Koordinaten: swisstopo). Zum Zoomen mit dem Mausrad zuerst in die Karte klicken.</p>
     </section>
@@ -51,14 +80,14 @@
         <div class="sect">
           <span class="eyebrow">Neu · Powder-Finder</span>
           <h2>Hänge wie gemacht für Pulverschnee</h2>
-          <p>Wir haben das Höhenmodell der ganzen Region durchsucht: nach langen Hängen, die konstant um 40° steil sind und quer zum Hang eben verlaufen – links und rechts gleich hoch. <strong><span id="powCount"></span> Touren</strong> haben so einen Hang.</p>
+          <p>Wir haben das digitale Höhenmodell der ganzen Region ausgewertet: gesucht sind lange Hänge mit gleichmässiger Hangneigung um 40° und planarer Hangform – ohne Querneigung, weder Mulde noch Rücken. <strong><span id="powCount"></span> Touren</strong> haben so einen Hang, insgesamt erfüllen <strong><span id="hangCount"></span> Hänge</strong> die Kriterien.</p>
           <ul class="crit">
-            <li><b>≈ 40°</b><span>Neigung zwischen 34° und 45°</span></li>
-            <li><b>konstant</b><span>höchstens ±3° Abweichung</span></li>
-            <li><b>≥ 200 Hm</b><span>am Stück in der Falllinie</span></li>
-            <li><b>eben</b><span>links und rechts gleich hoch</span></li>
+            <li><b>Hangneigung ≈ 40°</b><span>zwischen 34° und 45°</span></li>
+            <li><b>Gleichmässig</b><span>Neigungsstreuung höchstens ±3°</span></li>
+            <li><b>Höhendifferenz ≥ 200 Hm</b><span>durchgehend in der Falllinie</span></li>
+            <li><b>Planare Hangform</b><span>keine Querneigung, weder Mulde noch Rücken</span></li>
           </ul>
-          <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="cta" href="suche.html?powder=1">Powder-Hänge anzeigen</a></div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="cta" href="suche.html?powder=1">Powder-Touren anzeigen</a><button type="button" class="cta dark" id="toExplorer">Im Explorer erkunden</button></div>
           <p class="warn">Hänge ab 30° sind lawinengefährdet. Um 40° nur bei sicheren Verhältnissen – immer das aktuelle Lawinenbulletin prüfen.</p>
         </div>
         <svg class="powsvg" viewBox="0 0 420 320" aria-hidden="true">
@@ -72,7 +101,7 @@
           <path d="M100 270a60 60 0 0 0-14-38" fill="none" stroke="#16406A" stroke-width="2.5"/>
           <text x="112" y="258" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="20" fill="#16406A">40°</text>
           <path d="M40 270H380" stroke="#16406A" stroke-width="2"/>
-          <text x="210" y="300" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#DCE6F2">konstant steil · gleichmässig · eben</text>
+          <text x="210" y="300" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#DCE6F2">gleichmässige Hangneigung · planare Hangform</text>
         </svg>
       </div>
     </section>
@@ -92,6 +121,8 @@
 </div>
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="assets/tours.js"></script>
+<script src="assets/hangs.js"></script>
+<script src="assets/comp.js"></script>
 <script src="assets/landing.js"></script>
 <script src="assets/ui.js"></script>
 </body>
