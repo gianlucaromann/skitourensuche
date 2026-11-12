@@ -3,73 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Skitouren-Suche</title>
+<title>Skitouren-Suche – Tourenkarte Davos, Klosters, Arosa</title>
 <meta name="description" content="Skitouren in Davos, Klosters, Arosa und am Flüela finden und filtern.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%230F2A44' stroke='%23C9974A' stroke-width='2.5'/%3E%3Cpath d='M7 33 18 15l6 9 5-6 12 15Z' fill='%23DCE6F2'/%3E%3Cpath d='M11 38.5 37 31M13 41.5 39 34' stroke='%23C9974A' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-body{margin:0;background:#F4F6F8}
-*{box-sizing:border-box}
-a{color:#1F5FA8}a:hover{color:#123E70}
-.chip{font:500 14px/1 Inter,sans-serif;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid #C9D2DB;background:#FFFFFF;color:#2B3A47;cursor:pointer}
-.chip:hover{border-color:#1F5FA8}
-.chip.on{background:#13202B;border-color:#13202B;color:#FFFFFF}
-.chip:focus-visible,.btn:focus-visible,.field:focus-visible{outline:3px solid #7FB0E8;outline-offset:2px}
-.field{font:400 16px/1.2 Inter,sans-serif;border:1px solid #C9D2DB;border-radius:10px;background:#FFFFFF;color:#13202B;min-height:48px;padding:0 14px;box-sizing:border-box;width:100%}
-.btn{font:500 14px/1 Inter,sans-serif;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #C9D2DB;background:#FFFFFF;color:#13202B;cursor:pointer}
-.btn:hover{border-color:#1F5FA8;color:#1F5FA8}
-.g{font:600 13px/1 Inter,sans-serif;padding:6px 10px;border-radius:6px;white-space:nowrap}
-.g-L{background:#E3F1E6;color:#1D5B2C}
-.g-WS{background:#DCEAF8;color:#174A82}
-.g-ZS{background:#FDEBD3;color:#8A4A06}
-.g-S{background:#F9DCDC;color:#8E1B1B}
-input[type=range]{width:100%;accent-color:#1F5FA8}
-.h2{margin:0;font:600 13px/1 Inter,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#4A5A68}
-.sec{display:flex;flex-direction:column;gap:10px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.sr{position:absolute;left:-9999px}
-.card{background:#FFF;border:1px solid #DDE3E9;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
-.stat{display:flex;flex-direction:column;gap:4px}.stat span:first-child{font:500 12px/1 Inter,sans-serif;color:#5A6976}.stat span:last-child{font:600 16px/1.1 Inter,sans-serif}
-.kv{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font:400 14px/1.35 Inter,sans-serif}.kv dt{color:#5A6976}.kv dd{margin:0}
-.hero{position:relative;overflow:hidden;color:#FFF;padding:28px 24px 170px;background:linear-gradient(180deg,#0B2238 0%,#16406A 60%,#3E74A8 100%)}
-.hero-in{position:relative;z-index:1;max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.range{position:absolute;left:0;bottom:-1px;width:100%;height:200px}
-.brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.logo{width:48px;height:48px;flex:none}
-.wordmark{font:700 22px/1 'Space Grotesk',sans-serif;letter-spacing:-.01em}.wordmark span{color:#E0B771;margin:0 2px}
-.pill{font:600 12px/1 Inter,sans-serif;padding:6px 10px;border-radius:999px;border:1px solid #C9974A;color:#E0B771;text-decoration:none;margin-left:auto}
-.pill:hover{background:#C9974A;color:#0B2238}
-#q{box-shadow:0 10px 30px rgba(5,20,35,.35)}
-.chip:hover,.btn:hover{border-color:#A8762E;color:#8A5E1E}
-.chip.on,.chip.on:hover{background:#16406A;border-color:#16406A;color:#FFF}
-.h2{color:#8A5E1E!important}
-input[type=range]{accent-color:#A8762E}
-.card{box-shadow:0 1px 2px rgba(15,42,68,.06);transition:box-shadow .2s,border-color .2s,transform .2s;border-top:3px solid #C9974A!important}
-.card:hover{box-shadow:0 10px 28px rgba(15,42,68,.12);transform:translateY(-2px)}
-.card h3{color:#0F2A44}
-main{margin-top:-24px!important;position:relative;z-index:2}
-footer{background:#0B2238;color:#C8D5E3;padding:40px 24px;font:400 14px/1.6 Inter,sans-serif}
-footer .in{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-footer h2{margin:0;font:600 18px/1.2 'Space Grotesk',sans-serif;color:#E0B771}
-footer p{margin:0;max-width:820px}footer a{color:#E0B771}
-.notice{border-left:3px solid #C9974A;padding:10px 14px;background:rgba(201,151,74,.12);border-radius:0 8px 8px 0;color:#FFF}
-@media (max-width:600px){h1{font-size:34px!important}.hero{padding-bottom:140px}.range{height:150px}.pill{margin-left:0}}
-</style>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div style="min-height:100vh;background:#F4F6F8;font-family:Inter,sans-serif;color:#13202B">
   <header class="hero">
     <div class="hero-in">
       <div class="brand">
-        <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0F2A44" stroke="#C9974A" stroke-width="2.5"/><path d="M7 33 18 15l6 9 5-6 12 15Z" fill="#DCE6F2"/><path d="m18 15 4 6.2-2.4-.8-2 2.2-1.8-1.6-2 .8Z" fill="#fff"/><path d="m29 18 3.6 4.3-2.1-.5-1.6 1.4-1.4-1.3Z" fill="#fff"/><path d="M11 38.5 37 31M13 41.5 39 34" stroke="#C9974A" stroke-width="2.4" stroke-linecap="round"/></svg>
-        <span class="wordmark">Skitouren<span>·</span>Suche</span>
-        <a href="#datenschutz" class="pill">Pilot-Schulprojekt</a>
+        <a href="index.html" aria-label="Startseite" style="display:flex"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0F2A44" stroke="#C9974A" stroke-width="2.5"/><path d="M7 33 18 15l6 9 5-6 12 15Z" fill="#DCE6F2"/><path d="m18 15 4 6.2-2.4-.8-2 2.2-1.8-1.6-2 .8Z" fill="#fff"/><path d="m29 18 3.6 4.3-2.1-.5-1.6 1.4-1.4-1.3Z" fill="#fff"/><path d="M11 38.5 37 31M13 41.5 39 34" stroke="#C9974A" stroke-width="2.4" stroke-linecap="round"/></svg></a>
+        <a href="index.html" style="display:flex;align-items:center;gap:12px;color:#FFF;text-decoration:none"><span class="wordmark">Skitouren<span>·</span>Suche</span></a>
+        <nav class="nav" aria-label="Hauptnavigation"><a href="index.html" aria-current="page">Karte</a><a href="suche.html">Touren suchen</a><a href="#datenschutz" class="pill">Pilot-Schulprojekt</a></nav>
       </div>
-      <div style="font:500 13px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Davos · Klosters · Arosa · Flüela</div>
-      <h1 style="margin:0;font:700 48px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.02em">Skitouren finden</h1>
-      <label for="q" class="sr">Suche nach Gipfel, Ort oder Route</label>
-      <input id="q" class="field" type="search" placeholder="Gipfel, Ausgangspunkt, Routen-Nr. …" style="max-width:640px;min-height:56px;font-size:18px;border:none">
+      <div style="font:500 13px/1.5 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Davos · Klosters · Arosa · Flüela · St. Antönien</div>
+      <h1 style="margin:0;font:700 52px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.02em;max-width:760px">Deine nächste Skitour beginnt hier</h1>
+      <p class="lead">Entdecke Gipfel rund um Davos auf der interaktiven Karte – vom gemütlichen Einsteigerberg bis zum anspruchsvollen Dreitausender.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="suche.html">Touren suchen</a><a class="cta ghost" href="#karte">Zur Karte</a></div>
     </div>
     <svg class="range" viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <circle cx="1240" cy="46" r="20" fill="#E0B771" opacity=".85"/>
@@ -80,50 +34,18 @@ footer p{margin:0;max-width:820px}footer a{color:#E0B771}
       <path d="M0 220v-20c200-30 360-15 520-25 180-13 300-25 460-10 140 13 280-5 460-15v70Z" fill="#F4F6F8"/>
     </svg>
   </header>
-  <main style="max-width:1240px;margin:0 auto;padding:28px 24px 64px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
-    <aside style="flex:1 1 260px;max-width:100%;display:flex;flex-direction:column;gap:24px;background:#FFF;border:1px solid #DDE3E9;border-radius:14px;padding:20px;box-sizing:border-box">
-      <section class="sec"><h2 class="h2">Region</h2><div class="chips" id="regions"></div></section>
-      <section class="sec"><h2 class="h2">Schwierigkeit (SAC)</h2><div class="chips" id="fams"></div></section>
-      <section class="sec"><h2 class="h2">Exposition</h2><div id="expos" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px"></div></section>
-      <section class="sec">
-        <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="hm" class="h2">Max. Aufstieg</label><span id="hmLabel" style="font:600 15px/1 Inter,sans-serif"></span></div>
-        <input id="hm" type="range" min="400" max="2000" step="100" value="2000">
-      </section>
-      <section class="sec"><h2 class="h2">Quelle</h2><div class="chips" id="srcs"></div></section>
-      <button type="button" class="btn" id="reset">Filter zurücksetzen</button>
-      <section style="display:flex;flex-direction:column;gap:12px;border-top:1px solid #EDF0F3;padding-top:20px">
-        <h2 class="h2">Legende</h2>
-        <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;font:400 13px/1.35 Inter,sans-serif">
-          <span class="g g-L" style="text-align:center">L</span><span>leicht · bis 30°</span>
-          <span class="g g-WS" style="text-align:center">WS</span><span>wenig schwierig · ab 30°</span>
-          <span class="g g-ZS" style="text-align:center">ZS</span><span>ziemlich schwierig · ab 35°</span>
-          <span class="g g-S" style="text-align:center">S</span><span>schwierig · ab 40°</span>
-        </div>
-        <p style="margin:0;font:400 13px/1.45 Inter,sans-serif;color:#2B3A47"><strong>+ / −</strong> obere / untere Stufe innerhalb des Grads (z. B. WS+ &gt; WS &gt; WS−).</p>
-        <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font:400 13px/1.4 Inter,sans-serif;color:#2B3A47">
-          <dt style="font-weight:600">Hm</dt><dd style="margin:0">Höhenmeter</dd>
-          <dt style="font-weight:600">≈</dt><dd style="margin:0">Richtwert, geschätzt</dd>
-          <dt style="font-weight:600">Zeit ≈</dt><dd style="margin:0">gerechnet mit 400 Hm/h</dd>
-          <dt style="font-weight:600">–</dt><dd style="margin:0">kein Aufstieg (Abfahrtsroute)</dd>
-          <dt style="font-weight:600">N … NW</dt><dd style="margin:0">Hangausrichtung (O = Ost)</dd>
-          <dt style="font-weight:600;color:#1D5B2C">Grün</dt><dd style="margin:0">Daten aus SAC-Tourenportal</dd>
-          <dt style="font-weight:600;color:#8A4A06">Orange</dt><dd style="margin:0">Richtwert – vor Tour prüfen</dd>
-        </dl>
-      </section>
-    </aside>
-    <section style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px">
-      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center">
-        <p style="margin:0;font:500 16px/1.4 Inter,sans-serif;color:#2B3A47"><strong id="count"></strong> von <span id="total"></span> Touren</p>
-        <div style="display:flex;align-items:center;gap:10px">
-          <label for="sort" style="font:500 14px/1 Inter,sans-serif;color:#4A5A68">Sortieren</label>
-          <select id="sort" class="field" style="width:auto;min-height:40px">
-            <option value="name">Gipfel A–Z</option><option value="grad">Schwierigkeit</option><option value="auf">Aufstieg Hm</option><option value="hoehe">Gipfelhöhe</option>
-          </select>
-        </div>
-      </div>
-      <div id="empty" hidden style="background:#FFF;border:1px dashed #C9D2DB;border-radius:14px;padding:40px;text-align:center;color:#4A5A68">Keine Tour passt zu diesen Filtern.</div>
-      <div id="tours" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:16px"></div>
-      <p style="margin:8px 0 0;font:400 13px/1.5 Inter,sans-serif;color:#5A6976">Fiktive Beispieldaten eines Pilot-Schulprojekts (Stand 11.11.2026). Touren mit „Richtwert“ sind grobe Angaben – vor der Tour im <a href="https://www.sac-cas.ch/de/huetten-und-touren/sac-tourenportal/">SAC-Tourenportal</a> und mit dem aktuellen <a href="https://www.slf.ch/de/lawinenbulletin-und-schneesituation/">SLF-Lawinenbulletin</a> prüfen. Alle Angaben ohne Gewähr.</p>
+  <main class="wrap">
+    <div class="stats" id="stats"></div>
+    <section class="sect" id="karte">
+      <h2>Tourenkarte</h2>
+      <p>Alle Touren auf einen Blick. Klicke auf einen Gipfel für Details. Die Farbe zeigt die Schwierigkeit. <strong><span id="mapCount"></span> Touren</strong> angezeigt.</p>
+      <div class="chips" id="mapFams" aria-label="Nach Schwierigkeit filtern"></div>
+      <div id="map" role="region" aria-label="Interaktive Karte der Skitouren"></div>
+      <p style="font-size:13px">Gipfelpositionen sind Näherungswerte. Zum Zoomen mit dem Mausrad zuerst in die Karte klicken.</p>
+    </section>
+    <section class="sect">
+      <h2>Regionen</h2>
+      <div class="regs" id="regs"></div>
     </section>
   </main>
   <footer id="datenschutz">
@@ -131,108 +53,13 @@ footer p{margin:0;max-width:820px}footer a{color:#E0B771}
       <h2>Datenschutz &amp; Hinweise</h2>
       <p class="notice"><strong>Pilot-Schulprojekt:</strong> Diese Website ist ein Pilotprojekt im Rahmen eines Schulprojekts. Alle Inhalte sind fiktiv bzw. dienen nur zu Demonstrationszwecken und dürfen nicht zur Planung echter Touren verwendet werden.</p>
       <p>Diese Website erhebt und speichert selbst keine personenbezogenen Daten. Es gibt keine Kontaktformulare, keine Cookies und kein Tracking. Suche und Filter laufen ausschliesslich lokal in deinem Browser.</p>
-      <p>Hosting: GitHub Pages (GitHub Inc.). Beim Aufruf können technisch notwendige Server-Logdaten wie die IP-Adresse durch GitHub verarbeitet werden. Schriften werden über Google Fonts geladen, dabei wird die IP-Adresse an Google übermittelt.</p>
-      <p>Für echte Skitouren immer das <a href="https://www.sac-cas.ch/de/huetten-und-touren/sac-tourenportal/">SAC-Tourenportal</a> und das <a href="https://www.slf.ch/de/lawinenbulletin-und-schneesituation/">SLF-Lawinenbulletin</a> konsultieren. Alle Angaben ohne Gewähr.</p>
+      <p>Hosting: GitHub Pages (GitHub Inc.). Beim Aufruf können technisch notwendige Server-Logdaten wie die IP-Adresse durch GitHub verarbeitet werden. Schriften werden über Google Fonts geladen, dabei wird die IP-Adresse an Google übermittelt. Die Kartenkacheln der Tourenkarte stammen vom Bundesamt für Landestopografie swisstopo bzw. von OpenStreetMap; beim Laden der Karte wird die IP-Adresse an diese Dienste übermittelt.</p>
+      <p>Für echte Skitouren immer aktuelle, offizielle Tourenbeschreibungen und das <a href="https://www.slf.ch/de/lawinenbulletin-und-schneesituation/">SLF-Lawinenbulletin</a> konsultieren. Alle Angaben ohne Gewähr.</p>
     </div>
   </footer>
 </div>
-<script>
-var TOURS = [
-  {id:"erzhorn",gipfel:"Erzhorn",hoehe:2924,route:"Abfahrt über den Erzhornsattel nach Innerarosa",region:"Arosa",start:"Erzhorn, Gipfel",ziel:"Innerarosa (1838 m)",grad:"S+",auf:null,ab:1030,zeit:"–",expo:["S","NW"],nr:"192b",sac:true,
-   text:"Vom Gipfel kurz über den W-Grat, dann durchs S-Couloir (45° auf 150 Hm). Unter einem Felssporn zum Erzhornsattel (2742 m) queren, NW-Flanke (30–38° auf 250 Hm) zu den Erzböden, via Älplisee und Schwellisee nach Innerarosa.",
-   key:"Wächten am Erzhornsattel können die Einfahrt erschweren."},
-  {id:"plattenhorn",gipfel:"Hinteres Plattenhorn Südgipfel",hoehe:3198,route:"Von Monbiel",region:"Klosters",start:"Klosters, Monbiel Parkplatz (1310 m)",ziel:"Monbiel",grad:"S-",auf:1900,ab:1900,zeit:"6–7 h",expo:["SW"],nr:"406a",sac:true,
-   text:"Lange Tour ohne Unterkunft (Berghaus Vereina im Winter zu). Via Stutzalp, Vereina, Süser Tal und Dagnuta ins Schneetälli, Südflanke (30–40° auf 250 Hm) zur Gratscharte (3045 m), Traverse aufs Gipfelfeld, zu Fuss zum Gipfel. Nordgipfel (3186 m) mit Ski erreichbar. Abfahrt auch via Vernela (406b).",
-   key:"Lawinengefahr durch Sonneneinstrahlung im Gipfelbereich; abschüssige Traverse nördlich des Grats."},
-  {id:"gorihorn",gipfel:"Isentällispitz / Gorihorn",hoehe:2985,route:"Von Tschuggen (Flüela)",region:"Flüela",start:"Davos Dorf, Tschuggen (1937 m)",ziel:"Tschuggen",grad:"WS+",auf:1020,ab:1020,zeit:"3 h",expo:["S","SW"],nr:"391",sac:true,
-   text:"Steile SW-Hänge des Tschuggenbergs, durchs Tschuggentälli auf ca. 2500 m, Felsen P. 2751 nördlich umgehen, über Rampe in den Sattel am Fuss des Gorihorns. Steiler Südhang zum Skidepot, zu Fuss zum Gipfel. Variante: SW-Flanke ab Gipfel (35–40° auf 120 Hm, ZS+).",
-   key:"Steiler Gipfelanstieg, sichere Verhältnisse nötig."},
-  {id:"pischa-klosters",gipfel:"Pischahorn",hoehe:2981,route:"Abfahrt via Novaier Tälli und Lauizughorn nach Klosters",region:"Klosters",start:"Pischahorn, Gipfel",ziel:"Klosters Platz, Bahnhof (1190 m)",grad:"ZS",auf:220,ab:1900,zeit:"–",expo:["N","NE","E","SE","S","SW","W","NW"],nr:"383a/b",sac:true,
-   text:"Über den NW-Grat zu P. 2854, dann steil ins Novaier Tälli (ca. 2250 m). Kurzer Zwischenaufstieg aufs Lauizughorn (2478 m), durchs Gatschiefertälli, Chüenisch Wald und Chüenischboden nach Klosters Platz.",
-   key:"Sichere Verhältnisse und gute Sicht zwingend; steile, ruppige Waldschneisen."},
-  {id:"roggenhorn",gipfel:"Roggenhorn",hoehe:2891,route:"Von Monbiel",region:"Klosters",start:"Klosters, Monbiel Parkplatz (1310 m)",ziel:"Monbiel",grad:"ZS-",auf:1600,ab:1600,zeit:"5 h",expo:["S","SW"],nr:"402a",sac:true,
-   text:"Via Stutzalp zum Berghaus Vereina, ins Vernela, steile Südhänge zur Terrasse des Vereinabergs. Über Rampe östlich P. 2718 steil (30–35° auf 100 Hm), auf ca. 2800 m über den SW-Grat zum Gipfel.",
-   key:"Sichere Verhältnisse am Gipfelaufbau nötig."},
-  {id:"wuosthorn",gipfel:"Wuosthorn",hoehe:2815,route:"Von Teufi (Dischma)",region:"Davos",start:"Davos Dischma, Teufi (1700 m)",ziel:"Teufi",grad:"ZS",auf:1120,ab:1120,zeit:"3:30 h",expo:["N","NE"],nr:"342a",sac:true,
-   text:"Via Gulerigen Hus und Boden, steil (30–35° auf 100 Hm) zur Alp Rüedischtälli, flach durchs Rüedisch Tälli zu P. 2429. Steile Gipfelflanke (35° auf 100 Hm) auf den Westgrat, Skidepot, meist zu Fuss zum Gipfel.",
-   key:"Ruppiger Zustieg und Gipfelhang erfordern sichere Verhältnisse."},
-  {id:"fl-schwarzhorn",gipfel:"Flüela Schwarzhorn",hoehe:3146,route:"Vom Flüelapass",region:"Flüela",start:"Flüelapass (2383 m)",ziel:"Flüelapass",grad:"WS",auf:760,ab:760,zeit:null,expo:[],sac:false,
-   text:"Kurze, beliebte Tour ab Passhöhe, höchster Gipfel der Region Davos.",key:"Passstrasse kann wegen Lawinengefahr gesperrt sein."},
-  {id:"pischahorn",gipfel:"Pischahorn",hoehe:2981,route:"Von Pischa (Bergbahn)",region:"Davos",start:"Davos Dorf, Bergstation Pischa",ziel:"Pischa",grad:"WS-",auf:500,ab:500,zeit:null,expo:[],sac:false,
-   text:"Kurzer Aufstieg ab Bergbahn, gut kombinierbar mit Abfahrten nach Klosters oder ins Flüelatal.",key:"Betriebszeiten der Bergbahn prüfen."},
-  {id:"sentischhorn",gipfel:"Sentischhorn",hoehe:2827,route:"Von Dürrboden (Dischma)",region:"Davos",start:"Davos Dischma, Dürrboden (2007 m)",ziel:"Dürrboden",grad:"WS",auf:820,ab:820,zeit:null,expo:[],sac:false,
-   text:"Klassische Halbtagestour im hinteren Dischma.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"grialetsch",gipfel:"Piz Grialetsch",hoehe:3131,route:"Von Dürrboden (Dischma)",region:"Davos",start:"Davos Dischma, Dürrboden (2007 m)",ziel:"Dürrboden",grad:"WS+",auf:1120,ab:1120,zeit:null,expo:[],sac:false,
-   text:"Hochtourencharakter mit Gletscher; auch als Zweitagestour via Chamanna da Grialetsch.",key:"Gletscher: Spaltengefahr, Ausrüstung entsprechend."},
-  {id:"scaletta",gipfel:"Scalettahorn",hoehe:3068,route:"Von Dürrboden (Dischma)",region:"Davos",start:"Davos Dischma, Dürrboden (2007 m)",ziel:"Dürrboden",grad:"ZS-",auf:1060,ab:1060,zeit:null,expo:[],sac:false,
-   text:"Anspruchsvollere Tour im Talschluss des Dischma.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"chueealphorn",gipfel:"Chüealphorn",hoehe:3078,route:"Von Sertig Dörfli",region:"Davos",start:"Davos Sertig, Sertig Dörfli (1861 m)",ziel:"Sertig Dörfli",grad:"WS+",auf:1220,ab:1220,zeit:null,expo:[],sac:false,
-   text:"Lange Tour durchs Chüealptal.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"aelplihorn",gipfel:"Älplihorn",hoehe:3006,route:"Von Monstein",region:"Davos",start:"Davos Monstein (1626 m)",ziel:"Monstein",grad:"WS",auf:1380,ab:1380,zeit:null,expo:[],sac:false,
-   text:"Beliebte Tour ab Monstein mit langer Abfahrt.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"choerbsch",gipfel:"Chörbschhorn",hoehe:2650,route:"Von Clavadel",region:"Davos",start:"Davos Platz, Clavadel (1664 m)",ziel:"Clavadel",grad:"WS-",auf:990,ab:990,zeit:null,expo:[],sac:false,
-   text:"Einfachere Tour südlich von Davos.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"madrisahorn",gipfel:"Madrisahorn",hoehe:2826,route:"Von der Saaser Alp (Madrisa)",region:"Klosters",start:"Klosters, Bergstation Madrisa (1887 m)",ziel:"Saaser Alp",grad:"WS",auf:940,ab:940,zeit:null,expo:[],sac:false,
-   text:"Aufstieg ab Bergbahn Madrisa.",key:"Betriebszeiten der Bergbahn prüfen."},
-  {id:"sulzfluh",gipfel:"Sulzfluh",hoehe:2817,route:"Von Partnun",region:"St. Antönien",start:"St. Antönien, Partnun (1763 m)",ziel:"Partnun",grad:"WS",auf:1050,ab:1050,zeit:null,expo:[],sac:false,
-   text:"Klassiker im Rätikon.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."},
-  {id:"schiesshorn",gipfel:"Schiesshorn",hoehe:2605,route:"Von Arosa",region:"Arosa",start:"Arosa",ziel:"Arosa",grad:"WS-",auf:800,ab:800,zeit:null,expo:[],sac:false,
-   text:"Kurze Tour ab Arosa.",key:"Angaben grob – Route im SAC-Tourenportal prüfen."}
-];
-var GRADES = ["L","L+","WS-","WS","WS+","ZS-","ZS","ZS+","S-","S","S+"];
-var REGIONS = ["Davos","Flüela","Klosters","St. Antönien","Arosa"];
-var FAMS = [{k:"L",l:"Leicht (L)"},{k:"WS",l:"Wenig schwierig (WS)"},{k:"ZS",l:"Ziemlich schwierig (ZS)"},{k:"S",l:"Schwierig (S)"}];
-var EXPOS = ["N","NE","E","SE","S","SW","W","NW"];
-var EXPO_DE = {N:"N",NE:"NO",E:"O",SE:"SO",S:"S",SW:"SW",W:"W",NW:"NW"};
-function fam(g){return g.replace(/[+-]/g,"");}
-function fmt(n){return n.toLocaleString("de-CH").replace(/[’,]/g,"'");}
-var $=function(id){return document.getElementById(id);};
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-var D={q:"",regions:[],fams:[],expos:[],maxHm:2000,src:"alle",sort:"name"};
-var s=JSON.parse(JSON.stringify(D)),open={};
-function tog(k,v){var i=s[k].indexOf(v);if(i<0)s[k].push(v);else s[k].splice(i,1);render();}
-function chips(el,items){$(el).innerHTML=items.map(function(x,i){return '<button type="button" class="chip'+(x.on?' on':'')+'" aria-pressed="'+x.on+'" data-i="'+i+'"'+(el==="expos"?' style="padding:0"':'')+'>'+esc(x.label)+'</button>';}).join("");
-  $(el).onclick=function(e){var b=e.target.closest("button");if(b)items[b.dataset.i].fn();};}
-function render(){
-  var q=s.q.trim().toLowerCase();
-  var list=TOURS.filter(function(t){
-    if(q&&[t.gipfel,t.route,t.region,t.start,t.ziel,t.nr||"",t.grad].join(" ").toLowerCase().indexOf(q)<0)return false;
-    if(s.regions.length&&s.regions.indexOf(t.region)<0)return false;
-    if(s.fams.length&&s.fams.indexOf(fam(t.grad))<0)return false;
-    if(s.expos.length&&!t.expo.some(function(e){return s.expos.indexOf(e)>=0;}))return false;
-    if(s.maxHm<2000&&t.auf!=null&&t.auf>s.maxHm)return false;
-    if(s.src==="sac"&&!t.sac)return false;
-    return true;
-  });
-  var by={name:function(a,b){return a.gipfel.localeCompare(b.gipfel,"de");},grad:function(a,b){return GRADES.indexOf(a.grad)-GRADES.indexOf(b.grad);},auf:function(a,b){return (a.auf||0)-(b.auf||0);},hoehe:function(a,b){return b.hoehe-a.hoehe;}};
-  list.sort(by[s.sort]);
-  chips("regions",REGIONS.map(function(r){return {label:r,on:s.regions.indexOf(r)>=0,fn:function(){tog("regions",r);}};}));
-  chips("fams",FAMS.map(function(f){return {label:f.l,on:s.fams.indexOf(f.k)>=0,fn:function(){tog("fams",f.k);}};}));
-  chips("expos",EXPOS.map(function(e){return {label:EXPO_DE[e],on:s.expos.indexOf(e)>=0,fn:function(){tog("expos",e);}};}));
-  chips("srcs",[{k:"alle",l:"Alle"},{k:"sac",l:"Nur SAC-geprüft"}].map(function(x){return {label:x.l,on:s.src===x.k,fn:function(){s.src=x.k;render();}};}));
-  $("q").value!==s.q&&($("q").value=s.q);$("sort").value=s.sort;$("hm").value=s.maxHm;
-  $("hmLabel").textContent=s.maxHm>=2000?"egal":"≤ "+fmt(s.maxHm)+" Hm";
-  $("count").textContent=list.length;$("total").textContent=TOURS.length;$("empty").hidden=list.length>0;
-  $("tours").innerHTML=list.map(function(t){
-    var o=!!open[t.id],ap=t.sac?"":"≈ ";
-    var zeit=t.zeit?t.zeit:(t.auf?"≈ "+(Math.round(t.auf/400*2)/2).toString().replace(".",",")+" h":"–");
-    var expo=t.expo.length?(t.expo.length===8?"alle":t.expo.map(function(e){return EXPO_DE[e];}).join(", ")):"prüfen";
-    return '<article class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:4px;min-width:0">'+
-      '<h3 style="margin:0;font:600 21px/1.15 \'Space Grotesk\',sans-serif">'+esc(t.gipfel)+'</h3><p style="margin:0;font:400 14px/1.35 Inter,sans-serif;color:#4A5A68">'+esc(t.route)+'</p></div><span class="g g-'+fam(t.grad)+'">'+esc(t.grad)+'</span></div>'+
-      '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #EDF0F3;border-bottom:1px solid #EDF0F3;padding:12px 0">'+
-      '<div class="stat"><span>Aufstieg</span><span>'+(t.auf==null?"–":ap+fmt(t.auf)+" Hm")+'</span></div><div class="stat"><span>Abfahrt</span><span>'+ap+fmt(t.ab)+' Hm</span></div><div class="stat"><span>Zeit</span><span>'+zeit+'</span></div></div>'+
-      '<dl class="kv"><dt>Gipfel</dt><dd>'+fmt(t.hoehe)+' m ü. M.</dd><dt>Start</dt><dd>'+esc(t.start)+'</dd><dt>Ziel</dt><dd>'+esc(t.ziel)+'</dd><dt>Exposition</dt><dd>'+expo+'</dd></dl>'+
-      (o?'<div style="display:flex;flex-direction:column;gap:10px;background:#F4F6F8;border-radius:10px;padding:14px"><p style="margin:0;font:400 14px/1.5 Inter,sans-serif">'+esc(t.text)+'</p><p style="margin:0;font:500 14px/1.5 Inter,sans-serif;color:#8A4A06">Achtung: '+esc(t.key)+'</p></div>':'')+
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:auto"><span style="font:500 12px/1.3 Inter,sans-serif;color:'+(t.sac?"#1D5B2C":"#8A4A06")+'">'+(t.sac?"SAC-Tourenportal · Route "+esc(t.nr):"Richtwert – prüfen")+'</span>'+
-      '<button type="button" class="btn" aria-expanded="'+o+'" data-id="'+t.id+'">'+(o?"Weniger":"Details")+'</button></div></article>';
-  }).join("");
-}
-$("tours").onclick=function(e){var b=e.target.closest("button[data-id]");if(!b)return;open[b.dataset.id]=!open[b.dataset.id];render();var nb=document.querySelector('button[data-id="'+b.dataset.id+'"]');nb&&nb.focus();};
-$("q").oninput=function(e){s.q=e.target.value;render();};
-$("sort").onchange=function(e){s.sort=e.target.value;render();};
-$("hm").oninput=function(e){s.maxHm=Number(e.target.value);render();};
-$("reset").onclick=function(){s=JSON.parse(JSON.stringify(D));render();};
-render();
-</script>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="assets/tours.js"></script>
+<script src="assets/landing.js"></script>
 </body>
 </html>

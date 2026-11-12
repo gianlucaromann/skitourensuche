@@ -1,5 +1,7 @@
 # Skitouren-Suche
 
-Statische Website zum Finden und Filtern von Skitouren (Davos, Klosters, Arosa, Flüela).
+Pilot-Schulprojekt mit fiktiven Beispieldaten. Statische Website, live via GitHub Pages.
 
-Öffnen: `index.html` im Browser. Hosting via GitHub Pages möglich (Branch, Root).
+- `index.html` – Startseite mit interaktiver Tourenkarte (Leaflet)
+- `suche.html` – Tourensuche mit Filtern
+- `assets/tours.js` – Tourendaten (neue Tour = neuer Eintrag mit `lat`/`lon`)
