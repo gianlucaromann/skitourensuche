@@ -23,7 +23,7 @@ function draw(){
     var g=groups[k].sort(function(a,b){return GRADES.indexOf(a.grad)-GRADES.indexOf(b.grad);}),t=g[0];
     var html='<div class="pop"><h3>'+esc(t.gipfel)+'</h3><p class="hh">'+fmt(t.hoehe)+' m ü. M. · '+esc(t.region)+'</p>'+g.map(function(x){
       return '<div class="row"><div><span>'+esc(x.route)+'</span><span class="g g-'+fam(x.grad)+'">'+esc(x.grad)+'</span></div><div><span>'+(x.auf==null?"Abfahrt "+fmt(x.ab)+" Hm":"Aufstieg "+(x.det?"":"≈ ")+fmt(x.auf)+" Hm")+'</span><a href="suche.html?tour='+x.id+'">Details →</a></div></div>';}).join("")+'</div>';
-    L.marker([t.lat,t.lon],{title:t.gipfel,alt:t.gipfel+" ("+t.grad+")",icon:L.divIcon({className:"",iconSize:[34,34],iconAnchor:[17,34],popupAnchor:[0,-32],html:'<span class="pin pin-'+fam(t.grad)+'"><i>'+esc(t.grad)+'</i></span>'})}).bindPopup(html).addTo(layer);
+    L.marker([t.lat,t.lon],{title:t.gipfel,alt:t.gipfel+" ("+t.grad+")",icon:L.divIcon({className:"",iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-16],html:'<span class="pin pin-'+fam(t.grad)+'"><i>'+esc(t.grad)+'</i></span>'})}).bindPopup(html).addTo(layer);
     pts.push([t.lat,t.lon]);
   });
   if(pts.length)map.fitBounds(pts,{padding:[40,40],maxZoom:13});
