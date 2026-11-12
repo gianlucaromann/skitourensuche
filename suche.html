@@ -12,15 +12,18 @@
 </head>
 <body>
 <div style="min-height:100vh;background:#F4F6F8;font-family:Inter,sans-serif;color:#13202B">
-  <header class="hero">
-    <div class="hero-in">
-      <div class="brand">
+  <div class="topbar">
+    <div class="brand">
         <a href="index.html" aria-label="Startseite" style="display:flex"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0F2A44" stroke="#C9974A" stroke-width="2.5"/><path d="M7 33 18 15l6 9 5-6 12 15Z" fill="#DCE6F2"/><path d="m18 15 4 6.2-2.4-.8-2 2.2-1.8-1.6-2 .8Z" fill="#fff"/><path d="m29 18 3.6 4.3-2.1-.5-1.6 1.4-1.4-1.3Z" fill="#fff"/><path d="M11 38.5 37 31M13 41.5 39 34" stroke="#C9974A" stroke-width="2.4" stroke-linecap="round"/></svg></a>
         <a href="index.html" style="display:flex;align-items:center;gap:12px;color:#FFF;text-decoration:none"><span class="wordmark">Skitouren<span>·</span>Suche</span></a>
         <nav class="nav" aria-label="Hauptnavigation"><a href="index.html">Karte</a><a href="suche.html" aria-current="page">Touren suchen</a><a href="datenschutz.html" class="pill">Pilot-Schulprojekt</a></nav>
-      </div>
-      <div style="font:500 13px/1.5 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Davos · Klosters · Arosa · Flüela</div>
+    </div>
+  </div>
+  <header class="hero">
+    <div class="hero-in">
+      <div style="font:500 13px/1.5 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Davos · Klosters · Arosa · Flüela · St. Antönien</div>
       <h1 style="margin:0;font:700 48px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.02em">Skitouren finden</h1>
+      <p class="lead" style="font-size:16px">Filtere nach Region, Schwierigkeit, Exposition – oder direkt nach Powder-Hängen.</p>
       <label for="q" class="sr">Suche nach Gipfel, Ort oder Route</label>
       <input id="q" class="field" type="search" placeholder="Gipfel, Ausgangspunkt, Region …" style="max-width:640px;min-height:56px;font-size:18px;border:none">
     </div>
@@ -37,6 +40,7 @@
     <aside style="flex:1 1 260px;max-width:100%;display:flex;flex-direction:column;gap:24px;background:#FFF;border:1px solid #DDE3E9;border-radius:14px;padding:20px;box-sizing:border-box">
       <section class="sec"><h2 class="h2">Region</h2><div class="chips" id="regions"></div></section>
       <section class="sec"><h2 class="h2">Schwierigkeit</h2><div class="chips" id="fams"></div></section>
+      <section class="sec"><h2 class="h2">Powder</h2><div class="chips" id="pow"></div><p class="hint">Lange, gleichmässige Hänge um 40° – per Geländeanalyse gefunden.</p></section>
       <section class="sec"><h2 class="h2">Exposition</h2><div id="expos" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px"></div></section>
       <section class="sec">
         <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="hm" class="h2">Max. Aufstieg</label><span id="hmLabel" style="font:600 15px/1 Inter,sans-serif"></span></div>
@@ -58,6 +62,7 @@
           <dt style="font-weight:600">Zeit ≈</dt><dd style="margin:0">gerechnet mit 400 Hm/h</dd>
           <dt style="font-weight:600">–</dt><dd style="margin:0">kein Aufstieg (Abfahrtsroute)</dd>
           <dt style="font-weight:600">N … NW</dt><dd style="margin:0">Hangausrichtung (O = Ost)</dd>
+          <dt style="font-weight:600;color:#16406A">❄</dt><dd style="margin:0">Powder-Hang: konstant um 40° (34–45°), mind. 200 Hm am Stück, links und rechts gleich hoch</dd>
           <dt style="font-weight:600;color:#8A4A06">Orange</dt><dd style="margin:0">Richtwert – vor Tour prüfen</dd>
         </dl>
       </section>
@@ -68,7 +73,7 @@
         <div style="display:flex;align-items:center;gap:10px">
           <label for="sort" style="font:500 14px/1 Inter,sans-serif;color:#4A5A68">Sortieren</label>
           <select id="sort" class="field" style="width:auto;min-height:40px">
-            <option value="name">Gipfel A–Z</option><option value="grad">Schwierigkeit</option><option value="auf">Aufstieg Hm</option><option value="hoehe">Gipfelhöhe</option>
+            <option value="name">Gipfel A–Z</option><option value="grad">Schwierigkeit</option><option value="auf">Aufstieg Hm</option><option value="hoehe">Gipfelhöhe</option><option value="pow">Powder-Hang (längster)</option>
           </select>
         </div>
       </div>
@@ -77,8 +82,16 @@
       <p style="margin:8px 0 0;font:400 13px/1.5 Inter,sans-serif;color:#5A6976">Fiktive Beispieldaten eines Pilot-Schulprojekts (Stand 11.11.2026). Touren mit „Richtwert“ sind grobe Angaben – vor der Tour mit dem aktuellen <a href="https://www.slf.ch/de/lawinenbulletin-und-schneesituation/">SLF-Lawinenbulletin</a> prüfen. Alle Angaben ohne Gewähr.</p>
     </section>
   </main>
+  <footer class="foot">
+    <div class="foot-in">
+      <span class="wordmark" style="font-size:18px">Skitouren<span>·</span>Suche</span>
+      <span>Davos · Klosters · Arosa · Flüela · St. Antönien</span>
+      <a href="datenschutz.html">Pilot-Schulprojekt</a>
+    </div>
+  </footer>
 </div>
 <script src="assets/tours.js"></script>
 <script src="assets/suche.js"></script>
+<script src="assets/ui.js"></script>
 </body>
 </html>
