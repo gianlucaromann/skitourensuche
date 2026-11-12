@@ -10,7 +10,10 @@ if(P.get("fav"))s.fav=true;
 if(["name","grad","auf","hoehe","pow"].indexOf(P.get("sort"))>=0)s.sort=P.get("sort");
 if(focusId)open[focusId]=true;
 
-function tog(k,v){var i=s[k].indexOf(v);if(i<0)s[k].push(v);else s[k].splice(i,1);render();}
+var calm=window.matchMedia("(prefers-reduced-motion: reduce)").matches,raf=0;
+function smooth(){if(document.startViewTransition&&!calm){try{document.startViewTransition(render);return;}catch(e){}}render();}
+function soon(){if(raf)return;raf=requestAnimationFrame(function(){raf=0;render();});}
+function tog(k,v){var i=s[k].indexOf(v);if(i<0)s[k].push(v);else s[k].splice(i,1);smooth();}
 function chips(el,items){$(el).innerHTML=items.map(function(x,i){return '<button type="button" class="chip'+(x.on?' on':'')+'" aria-pressed="'+x.on+'" data-i="'+i+'">'+esc(x.label)+(x.n!=null?' <small>'+x.n+'</small>':'')+'</button>';}).join("");
   $(el).onclick=function(e){var b=e.target.closest("button");if(b)items[b.dataset.i].fn();};}
 function syncUrl(){
@@ -40,7 +43,7 @@ function card(t){
   var ex=t.expo.length?t.expo:(t.pow?[t.pow.expo]:[]);
   var expo=ex.length?(ex.length===8?"alle":ex.map(function(e){return EXPO_DE[e];}).join(", ")):"prüfen";
   var pw=t.pow?'<div class="powbox"><b>❄ Powder-Hang</b><span>'+powText(t.pow)+'</span></div>':'';
-  return '<article class="card'+(t.pow?' haspow':'')+'" id="t-'+t.id+'" data-tid="'+t.id+'"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:4px;min-width:0">'+
+  return '<article class="card'+(t.pow?' haspow':'')+'" id="t-'+t.id+'" data-tid="'+t.id+'" style="view-transition-name:c-'+t.id+'"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div style="display:flex;flex-direction:column;gap:4px;min-width:0">'+
     '<h3 style="margin:0;font:600 21px/1.15 \'Space Grotesk\',sans-serif">'+esc(t.gipfel)+'</h3><p style="margin:0;font:400 14px/1.35 Inter,sans-serif;color:#4A5A68">'+esc(t.route)+' · '+esc(t.region)+'</p></div>'+
     '<span style="display:flex;gap:6px;align-items:center;flex:none"><button type="button" class="favb'+(fv?' on':'')+'" data-fav="'+t.id+'" aria-pressed="'+fv+'" aria-label="'+esc(t.gipfel)+(fv?' von der Merkliste entfernen':' merken')+'">'+(fv?'♥':'♡')+'</button>'+(t.pow?'<span class="g g-P" title="Powder-Hang">❄</span>':'')+'<span class="g g-'+fam(t.grad)+'">'+esc(t.grad)+'</span></span></div>'+
     '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #EDF0F3;border-bottom:1px solid #EDF0F3;padding:12px 0">'+
@@ -53,7 +56,7 @@ function card(t){
     '<button type="button" class="btn" aria-expanded="'+o+'" data-id="'+t.id+'">'+(o?"Weniger":"Details")+'</button></div></article>';
 }
 /* Karte */
-var smap=null,slayer=null,marks={},lastSig="",mapOn=pref("skt-map")!=="0";
+var smap=null,slayer=null,marks={},lastSig="",firstFit=true,mapOn=pref("skt-map")!=="0";
 function initMap(){
   smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);
   smap.on("click",function(){smap.scrollWheelZoom.enable();});smap.on("mouseout",function(){smap.scrollWheelZoom.disable();});
@@ -74,7 +77,7 @@ function drawMap(list){
     pts.push([t.lat,t.lon]);
   });
   smap.invalidateSize();
-  if(pts.length)smap.fitBounds(pts,{padding:[40,40],maxZoom:13});
+  if(pts.length){if(firstFit){firstFit=false;smap.fitBounds(pts,{padding:[40,40],maxZoom:13});}else smap.flyToBounds(pts,{padding:[40,40],maxZoom:13,duration:.6});}
 }
 function goTo(id){
   open[id]=true;render();var el=$("t-"+id);
@@ -85,8 +88,8 @@ function render(){
   var list=filtered(),cnt=function(f){return TOURS.filter(f).length;};
   chips("regions",REGIONS.map(function(r){return {label:r,n:cnt(function(t){return t.region===r;}),on:s.regions.indexOf(r)>=0,fn:function(){tog("regions",r);}};}));
   chips("fams",FAMS.map(function(f){return {label:f.l,n:cnt(function(t){return fam(t.grad)===f.k;}),on:s.fams.indexOf(f.k)>=0,fn:function(){tog("fams",f.k);}};}));
-  chips("pow",[{label:"❄ Nur Powder-Hänge",n:cnt(function(t){return t.pow;}),on:s.pow,fn:function(){s.pow=!s.pow;if(s.pow)s.sort="pow";else if(s.sort==="pow")s.sort="name";render();}}]);
-  chips("fav",[{label:"♥ Nur gemerkte Touren",n:FAV.list().length,on:s.fav,fn:function(){s.fav=!s.fav;render();}}]);
+  chips("pow",[{label:"❄ Nur Powder-Hänge",n:cnt(function(t){return t.pow;}),on:s.pow,fn:function(){s.pow=!s.pow;if(s.pow)s.sort="pow";else if(s.sort==="pow")s.sort="name";smooth();}}]);
+  chips("fav",[{label:"♥ Nur gemerkte Touren",n:FAV.list().length,on:s.fav,fn:function(){s.fav=!s.fav;smooth();}}]);
   $("expos").innerHTML=roseSVG(s.expos);
   $("q").value!==s.q&&($("q").value=s.q);$("sort").value=s.sort;$("hm").value=s.maxHm;
   $("hmLabel").textContent=s.maxHm>=2000?"egal":"≤ "+fmt(s.maxHm)+" Hm";
@@ -98,17 +101,18 @@ function render(){
 bindRose($("expos"),function(e){tog("expos",e);});
 $("tours").onclick=function(e){
   var f=e.target.closest("button[data-fav]");
-  if(f){FAV.toggle(f.dataset.fav);render();var nf=document.querySelector('button[data-fav="'+f.dataset.fav+'"]');nf&&nf.focus();return;}
-  var b=e.target.closest("button[data-id]");if(!b)return;open[b.dataset.id]=!open[b.dataset.id];render();var nb=document.querySelector('button[data-id="'+b.dataset.id+'"]');nb&&nb.focus();
+  if(f){FAV.toggle(f.dataset.fav);if(s.fav)smooth();else render();var nf=document.querySelector('button[data-fav="'+f.dataset.fav+'"]');nf&&nf.focus();return;}
+  var b=e.target.closest("button[data-id]");if(!b)return;open[b.dataset.id]=!open[b.dataset.id];var bid=b.dataset.id;if(document.startViewTransition&&!calm){document.startViewTransition(function(){render();var x=document.querySelector('button[data-id="'+bid+'"]');x&&x.focus({preventScroll:true});});return;}render();var nb=document.querySelector('button[data-id="'+b.dataset.id+'"]');nb&&nb.focus();
 };
 $("tours").addEventListener("mouseover",function(e){var c=e.target.closest("article[data-tid]");if(c&&!c.contains(e.relatedTarget))hl(c.dataset.tid,true);});
 $("tours").addEventListener("mouseout",function(e){var c=e.target.closest("article[data-tid]");if(c&&!c.contains(e.relatedTarget))hl(c.dataset.tid,false);});
 $("tours").addEventListener("focusin",function(e){var c=e.target.closest("article[data-tid]");if(c)hl(c.dataset.tid,true);});
 $("tours").addEventListener("focusout",function(e){var c=e.target.closest("article[data-tid]");if(c)hl(c.dataset.tid,false);});
-$("q").oninput=function(e){s.q=e.target.value;render();};
-$("sort").onchange=function(e){s.sort=e.target.value;render();};
-$("hm").oninput=function(e){s.maxHm=Number(e.target.value);render();};
-$("reset").onclick=function(){s=JSON.parse(JSON.stringify(D));render();};
+$("q").oninput=function(e){s.q=e.target.value;soon();};
+$("sort").onchange=function(e){s.sort=e.target.value;smooth();};
+$("hm").oninput=function(e){s.maxHm=Number(e.target.value);soon();};
+$("hm").onchange=function(){smooth();};
+$("reset").onclick=function(){s=JSON.parse(JSON.stringify(D));smooth();};
 $("mapBtn").onclick=function(){mapOn=!mapOn;pref("skt-map",mapOn?"1":"0");lastSig="";drawMap(filtered());};
 $("share").onclick=function(){var b=this,done=function(t){b.textContent=t;setTimeout(function(){b.textContent="Link kopieren";},1800);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href).then(function(){done("Kopiert ✓");},function(){done("Nicht möglich");});else done("Nicht möglich");};

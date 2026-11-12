@@ -224,3 +224,92 @@ button.cta{cursor:pointer;font-family:Inter,sans-serif}
 @media (max-width:900px){.explorer{grid-template-columns:1fr 1fr}.explorer .exc:last-child{grid-column:1/-1}}
 @media (max-width:600px){.explorer{grid-template-columns:1fr}.tabs{align-self:stretch}.tabs button{flex:1;padding:0 8px}#smap{height:280px}}
 @media (prefers-reduced-motion:reduce){.range>*{transition:none;transform:none!important}.det,.favb.on{animation:none}}
+
+/* ===== v5: flüssiger ===== */
+@view-transition{navigation:auto}
+.topbar{view-transition-name:topbar}
+::view-transition-group(*){animation-duration:.32s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}
+.vt .det{animation:none}
+.ready .leaflet-overlay-pane path,.ready .leaflet-marker-icon{transition:opacity .3s ease}
+.leaflet-overlay-pane path.off,.leaflet-marker-icon.off{opacity:0!important;pointer-events:none!important}
+.leaflet-fade-anim .leaflet-popup{transition:opacity .2s linear}
+.card,.reg,.statc,.exc{will-change:auto}
+.card{transition:box-shadow .25s cubic-bezier(.2,.7,.2,1),border-color .25s,transform .25s cubic-bezier(.2,.7,.2,1)}
+.reveal{transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.snow i{will-change:transform}
+.ctl:not([hidden]){animation:fadeup .3s cubic-bezier(.2,.7,.2,1)}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}}
+.hero-in>*{animation:fadeup .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-in>*:nth-child(2){animation-delay:.06s}.hero-in>*:nth-child(3){animation-delay:.12s}.hero-in>*:nth-child(4){animation-delay:.18s}.hero-in>*:nth-child(5){animation-delay:.24s}
+.chip,.btn,.cta,.tabs button{-webkit-tap-highlight-color:transparent}
+input[type=range]{cursor:pointer}
+
+/* ===== Startseite: durchgehend blau ===== */
+body.land{background:#0B2238}
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;transform:translateZ(0);
+  background:radial-gradient(900px 480px at 84% 8%,rgba(224,183,113,.16),transparent 62%),linear-gradient(180deg,#071726 0%,#0E2D4C 48%,#1D4B7C 100%)}
+.sky::before{content:"";position:absolute;inset:0;opacity:.6;background-size:520px 520px;
+  background-image:radial-gradient(1.2px 1.2px at 40px 60px,#fff 50%,transparent 51%),radial-gradient(1px 1px at 150px 190px,#fff 50%,transparent 51%),radial-gradient(1.4px 1.4px at 260px 80px,#fff 50%,transparent 51%),radial-gradient(1px 1px at 340px 300px,#fff 50%,transparent 51%),radial-gradient(1.2px 1.2px at 440px 150px,#fff 50%,transparent 51%),radial-gradient(1px 1px at 90px 400px,#fff 50%,transparent 51%),radial-gradient(1.3px 1.3px at 480px 440px,#fff 50%,transparent 51%),radial-gradient(1px 1px at 220px 470px,#fff 50%,transparent 51%)}
+.sky .snow i{animation-name:fallv}
+@keyframes fallv{to{transform:translate3d(6vw,112vh,0)}}
+.land>div:not(.sky){position:relative;z-index:1;color:#E6EEF6!important}
+.land .hero{background:none;padding-bottom:250px}
+.land .hero::before{display:none}
+.range2{position:absolute;left:0;bottom:0;width:100%;height:260px;pointer-events:none}
+.range2 .r-sun,.range2 .r-back,.range2 .r-front{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.range2 .r-sun{transform:translate(calc(var(--px)*26px),calc(var(--py)*14px))}
+.range2 .r-back{transform:translateX(calc(var(--px)*-10px))}
+.range2 .r-front{transform:translateX(calc(var(--px)*-24px))}
+.hmask,.tmask{stroke-dasharray:1;stroke-dashoffset:1}
+.ready .hmask{transition:stroke-dashoffset 2.4s cubic-bezier(.4,.1,.2,1) .5s;stroke-dashoffset:0}
+.summit{opacity:0;transform-box:fill-box;transform-origin:center}
+.ready .summit{opacity:1;transition:opacity .4s 2.8s;animation:pulse 2.6s ease-in-out 3s infinite}
+@keyframes pulse{50%{transform:scale(1.7);opacity:.55}}
+.trail{display:block;width:240px;height:90px;margin:-14px auto;overflow:visible}
+.trail .tmask{transition:stroke-dashoffset 1.3s cubic-bezier(.4,.1,.2,1) .15s}
+.trail.in .tmask{stroke-dashoffset:0}
+.trail .tdot{opacity:0;transition:opacity .3s 1.3s}.trail.in .tdot{opacity:1}
+.land .wrap{margin-top:-30px}
+.land .sect h2{color:#FFF}
+.land .sect>p,.land .ctl>p{color:#C8D5E3}
+.land .sect>p strong,.land .ctl>p strong{color:#FFF}
+.land .eyebrow{color:#E0B771}
+.land .mapinfo{color:#FFF!important}
+.land .statc,.land .exc,.land .reg,.land .powsec,.land .crit li{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);box-shadow:0 10px 30px rgba(3,12,22,.25)}
+.land .statc{border-top-color:#C9974A}
+.land .crit li{border-left-color:#C9974A;box-shadow:none}
+.land .statc b,.land .reg b,.land .crit b{color:#FFF}
+.land .statc span,.land .reg span,.land .crit span{color:#B9C9DA}
+.land .reg{color:#E6EEF6}.land .reg:hover{border-color:#C9974A;background:rgba(255,255,255,.11);color:#FFF}
+.land .reg em{color:#E0B771}
+.land .chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.26);color:#E6EEF6}
+.land .chip:hover{border-color:#E0B771;color:#FFF}
+.land .chip.on,.land .chip.on:hover{background:#C9974A;border-color:#C9974A;color:#0B2238}
+.land .chip-pow{border-color:#C9974A;color:#E0B771}
+.land .chip-pow.on,.land .chip-pow.on:hover{background:#C9974A;color:#0B2238}
+.land .tabs{background:rgba(255,255,255,.1)}
+.land .tabs button{color:#C8D5E3}
+.land .tabs button[aria-selected=true]{background:#FFF;color:#0F2A44}
+.land .exh{color:#E0B771}.land .exh output{color:#FFF}.land .rl{color:#B9C9DA}
+.land input[type=range]{accent-color:#E0B771}
+.land .explorer .btn{background:transparent;border-color:rgba(255,255,255,.3);color:#FFF}
+.land .explorer .btn:hover{border-color:#E0B771;color:#E0B771}
+.land .rose .w path{fill:rgba(255,255,255,.12);stroke:#12365A}
+.land .rose .w:hover path{fill:rgba(224,183,113,.4)}
+.land .rose .w.on path{fill:#C9974A}
+.land .rose .w text{fill:#E6EEF6}.land .rose .w.on text{fill:#0B2238}
+.land .rose .hub{fill:#0E2D4C;stroke:#C9974A}.land .rose .hubt{fill:#E0B771}
+.land .toplist button{background:rgba(255,255,255,.07)}
+.land .toplist button:hover{background:rgba(255,255,255,.12);border-color:#C9974A}
+.land .toplist b{color:#FFF}.land .toplist span,.land .toplist .none{color:#B9C9DA}
+.land .leg{color:#C8D5E3}
+.land #map{outline-color:rgba(255,255,255,.22);box-shadow:0 18px 50px rgba(3,12,22,.45)}
+.land .warn{background:rgba(201,151,74,.16);color:#F0CF96!important}
+.land .cta.dark{background:transparent;border-color:rgba(255,255,255,.5);color:#FFF;box-shadow:none}
+.land .cta.dark:hover{background:rgba(255,255,255,.12)}
+.land .powsvg{box-shadow:0 0 0 1px rgba(255,255,255,.16),0 14px 40px rgba(3,12,22,.4)}
+.land .foot{background:rgba(4,14,25,.6)}
+.land .topbar.scrolled{background:rgba(7,23,38,.84)}
+@media (max-width:600px){.land .hero{padding-bottom:190px}.range2{height:190px}.land .wrap{margin-top:-24px}}
+@media (prefers-reduced-motion:reduce){.hmask,.tmask{stroke-dashoffset:0!important;transition:none!important}.summit{opacity:1;animation:none!important}.trail .tdot{opacity:1}.hero-in>*,.ctl:not([hidden]){animation:none}.range2 *{transition:none!important;transform:none!important}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}

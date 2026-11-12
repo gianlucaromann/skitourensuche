@@ -7,11 +7,15 @@
 <meta name="description" content="Skitouren in Davos, Klosters, Arosa und am Flüela finden und filtern.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%230F2A44' stroke='%23C9974A' stroke-width='2.5'/%3E%3Cpath d='M7 33 18 15l6 9 5-6 12 15Z' fill='%23DCE6F2'/%3E%3Cpath d='M11 38.5 37 31M13 41.5 39 34' stroke='%23C9974A' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://wmts.geo.admin.ch">
+<link rel="prefetch" href="suche.html">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
+<body class="land">
+<div class="sky" aria-hidden="true"></div>
 <div style="min-height:100vh;background:#F4F6F8;font-family:Inter,sans-serif;color:#13202B">
   <div class="topbar">
     <div class="brand">
@@ -27,17 +31,27 @@
       <p class="lead">Entdecke Gipfel rund um Davos auf der interaktiven Karte – vom gemütlichen Einsteigerberg bis zum perfekten 40°-Powder-Hang.</p>
       <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="suche.html">Touren suchen</a><a class="cta ghost" href="#karte">Zur Karte</a><a class="cta ghost" href="#powder">❄ Powder-Finder</a><button type="button" class="cta ghost" id="rnd">Zufallstour</button></div>
     </div>
-    <svg class="range" viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-      <circle cx="1240" cy="46" r="20" fill="#E0B771" opacity=".85"/>
-      <path d="M0 160 120 90l100 40 140-90 110 80 90-40 140 60 120-80 120 70 120-60 120 50 120-70 140 60v110H0Z" fill="#6F95C0" opacity=".45"/>
-      <path d="M0 190 140 120l120 50 160-90 120 80 120-50 120 65 120-75 130 65 120-70 140 65 150-40v100H0Z" fill="#2D5C8C"/>
-      <path d="M420 80 448 99l-12-3-10 8-12-7-10 4-12-5Z M900 100l24 12-10-2-9 7-9-6-10 4-10 0Z M1150 95l26 12-11-2-9 7-10-6-10 5-10-2Z" fill="#EEF3F8"/>
-      <path d="M820 168 870 150 845 138 885 124 872 121 898 104" fill="none" stroke="#E0B771" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"/>
-      <path d="M0 220v-20c200-30 360-15 520-25 180-13 300-25 460-10 140 13 280-5 460-15v70Z" fill="#F4F6F8"/>
+    <svg class="range2" viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="gB" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="250"><stop offset="0" stop-color="#8FB1D8" stop-opacity=".62"/><stop offset=".55" stop-color="#6F95C0" stop-opacity=".3"/><stop offset="1" stop-color="#6F95C0" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gF" gradientUnits="userSpaceOnUse" x1="0" y1="80" x2="0" y2="258"><stop offset="0" stop-color="#4279B3"/><stop offset=".5" stop-color="#2F629A" stop-opacity=".85"/><stop offset="1" stop-color="#2A5788" stop-opacity="0"/></linearGradient>
+        <radialGradient id="gM"><stop offset="0" stop-color="#E0B771" stop-opacity=".5"/><stop offset="1" stop-color="#E0B771" stop-opacity="0"/></radialGradient>
+        <mask id="hm" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="260"><path class="hmask" pathLength="1" d="M742 232 796 206 770 192 820 168 870 150 845 138 885 124 872 121 898 104" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/></mask>
+      </defs>
+      <g class="r-sun"><circle cx="1240" cy="46" r="64" fill="url(#gM)"/><circle cx="1240" cy="46" r="20" fill="#E0B771"/></g>
+      <path class="r-back" d="M0 160 120 90l100 40 140-90 110 80 90-40 140 60 120-80 120 70 120-60 120 50 120-70 140 60v150H0Z" fill="url(#gB)"/>
+      <g class="r-front">
+        <path d="M0 190 140 120l120 50 160-90 120 80 120-50 120 65 120-75 130 65 120-70 140 65 150-40v140H0Z" fill="url(#gF)"/>
+        <path d="M0 190 140 120l120 50 160-90 120 80 120-50 120 65 120-75 130 65 120-70 140 65 150-40" fill="none" stroke="#A9C6E6" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M420 80 448 99l-12-3-10 8-12-7-10 4-12-5Z M900 100l24 12-10-2-9 7-9-6-10 4-10 0Z M1150 95l26 12-11-2-9 7-10-6-10 5-10-2Z M140 120l22 12-9-1-8 6-9-5-9 3-9-2Z M660 110l20 10-8-1-8 6-8-5-8 3-8-3Z" fill="#F4F8FC"/>
+        <path d="M742 232 796 206 770 192 820 168 870 150 845 138 885 124 872 121 898 104" fill="none" stroke="#E0B771" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#hm)"/>
+        <circle class="summit" cx="899" cy="102" r="3.5" fill="#E0B771"/>
+      </g>
     </svg>
   </header>
   <main class="wrap">
     <div class="stats" id="stats"></div>
+    <svg class="trail reveal" viewBox="0 0 240 90" aria-hidden="true"><defs><mask id="tm1" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="90"><path class="tmask" pathLength="1" d="M120 2C170 14 176 26 120 40S64 66 120 82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></mask></defs><path d="M120 2C170 14 176 26 120 40S64 66 120 82" fill="none" stroke="#E0B771" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#tm1)"/><circle class="tdot" cx="120" cy="86" r="4" fill="#E0B771"/></svg>
     <section class="sect" id="karte">
       <span class="eyebrow">Interaktive Karte</span>
       <h2>Tourenkarte</h2>
@@ -75,6 +89,7 @@
       <div id="map" role="region" aria-label="Interaktive Karte der Skitouren"></div>
       <p style="font-size:13px">Die Marker sitzen genau auf dem Gipfel (Koordinaten: swisstopo). Zum Zoomen mit dem Mausrad zuerst in die Karte klicken.</p>
     </section>
+    <svg class="trail reveal" viewBox="0 0 240 90" aria-hidden="true"><defs><mask id="tm2" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="90"><path class="tmask" pathLength="1" d="M120 2C70 14 64 26 120 40S176 66 120 82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></mask></defs><path d="M120 2C70 14 64 26 120 40S176 66 120 82" fill="none" stroke="#E0B771" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#tm2)"/><circle class="tdot" cx="120" cy="86" r="4" fill="#E0B771"/></svg>
     <section class="sect powsec" id="powder">
       <div class="powgrid">
         <div class="sect">
@@ -105,6 +120,7 @@
         </svg>
       </div>
     </section>
+    <svg class="trail reveal" viewBox="0 0 240 90" aria-hidden="true"><defs><mask id="tm3" maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="90"><path class="tmask" pathLength="1" d="M120 2C170 14 176 26 120 40S64 66 120 82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></mask></defs><path d="M120 2C170 14 176 26 120 40S64 66 120 82" fill="none" stroke="#E0B771" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#tm3)"/><circle class="tdot" cx="120" cy="86" r="4" fill="#E0B771"/></svg>
     <section class="sect">
       <span class="eyebrow">Gebiete</span>
       <h2>Regionen</h2>
