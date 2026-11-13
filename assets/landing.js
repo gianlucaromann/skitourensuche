@@ -51,7 +51,7 @@ function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{pad
 function hcol(n){return n<37?"#E0B771":(n<39.5?"#C77A14":"#B83232");}
 function hangPop(h){var t=h.t&&TOURS.filter(function(x){return x.id===h.t;})[0];
   return '<div class="pop"><h3>'+EXPO_LONG[h.expo]+'hang '+(h.d<400?'am ':'bei ')+esc(h.n)+'</h3><p class="hh">'+fmt(h.von)+'–'+fmt(h.bis)+' m ü. M.</p>'+
-    '<dl class="kv" style="font-size:13px"><dt>Höhendifferenz</dt><dd>'+fmt(h.hm)+' Hm</dd><dt>Hangneigung</dt><dd>Ø '+String(h.neig).replace(".",",")+'° (±'+String(h.std).replace(".",",")+'°)</dd><dt>Exposition</dt><dd>'+EXPO_LONG[h.expo]+'</dd><dt>Hanglänge</dt><dd>'+fmt(h.len)+' m</dd></dl>'+profSVG(h)+
+    '<dl class="kv" style="font-size:13px"><dt>Höhendifferenz</dt><dd>'+fmt(h.hm)+' Hm</dd><dt>Hangneigung</dt><dd>Ø '+String(h.neig).replace(".",",")+'° (±'+String(h.std).replace(".",",")+'°)</dd><dt>Exposition</dt><dd>'+EXPO_LONG[h.expo]+'</dd><dt>Hanglänge</dt><dd>'+fmt(h.len)+' m</dd><dt>Breite</dt><dd>≥ 40 m</dd><dt>Untergrund</dt><dd>'+h.rasen+' % Rasen'+(h.rasen<100?', '+(100-h.rasen)+' % Geröll':'')+'</dd></dl>'+profSVG(h)+
     (t?'<a href="suche.html?tour='+t.id+'" style="font-weight:600;font-size:13px">Tour '+esc(t.gipfel)+' ansehen →</a>':'')+'</div>';}
 function drawTours(doFit,o){
   var pts=[],n=0;

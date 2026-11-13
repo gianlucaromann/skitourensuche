@@ -7,9 +7,15 @@ Pilot-Schulprojekt mit fiktiven Beispieldaten. Statische Website, live via GitHu
 - `assets/tours.js` – Tourendaten (neue Tour = neuer Eintrag mit `lat`/`lon`)
 
 ## Powder-Hänge
-Touren mit `pow` in `assets/tours.js` haben einen per Geländeanalyse gefundenen Hang, `assets/hangs.js` enthält alle 94 gefundenen Hänge für den Powder-Explorer.
-Kriterien: Hangneigung 34–45°, Neigungsstreuung höchstens ±3°, Höhendifferenz mindestens 200 Hm in der Falllinie, planare Hangform (keine Querneigung, weder Mulde noch Rücken).
-Grundlage ist das Höhenmodell von swisstopo (30-m-Raster).
+Touren mit `pow` in `assets/tours.js` haben einen per Analyse gefundenen Hang, `assets/hangs.js` enthält alle gefundenen Hänge für den Powder-Explorer.
+Kriterien:
+- Hangneigung 34–45°, Neigungsstreuung höchstens ±3°
+- Höhendifferenz mindestens 200 Hm in der Falllinie
+- planare Hangform (keine Querneigung, weder Mulde noch Rücken)
+- Hangbreite mindestens 40 m: an jedem Punkt der Falllinie wird ein Querprofil von 40 m geprüft
+- Untergrund: Rasen, Zwergsträucher oder Geröll (Geröll höchstens 50 %); Fels, Gletscher, Wald und Gebüsch schliessen den Abschnitt aus
+
+Grundlagen: Höhenmodell swisstopo (30-m-Raster), Lebensraumkarte Schweiz (BAFU/WSL) für den Untergrund.
 
 ## Interaktive Funktionen
 - Startseite: Karte mit Touren-Ansicht und Powder-Explorer (Regler für Hangneigung und Höhendifferenz, Kompassrose für die Exposition), Zufallstour

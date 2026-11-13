@@ -64,7 +64,7 @@
         <div class="chips" id="mapFams" aria-label="Nach Schwierigkeit filtern"></div>
       </div>
       <div id="ctlH" role="tabpanel" aria-labelledby="tabH" class="ctl" hidden>
-        <p>Alle Hänge aus der Geländeanalyse. Stelle Hangneigung, Höhendifferenz und Exposition ein – die Karte reagiert sofort. Klicke auf einen Hang für das Hangprofil.</p>
+        <p>Alle Hänge aus der Gelände- und Untergrundanalyse. Stelle Hangneigung, Höhendifferenz und Exposition ein – die Karte reagiert sofort. Klicke auf einen Hang für das Hangprofil.</p>
         <div class="explorer">
           <div class="exc">
             <div class="exh"><span>Hangneigung</span><output id="oN"></output></div>
@@ -95,12 +95,14 @@
         <div class="sect">
           <span class="eyebrow">Neu · Powder-Finder</span>
           <h2>Hänge wie gemacht für Pulverschnee</h2>
-          <p>Wir haben das digitale Höhenmodell der ganzen Region ausgewertet: gesucht sind lange Hänge mit gleichmässiger Hangneigung um 40° und planarer Hangform – ohne Querneigung, weder Mulde noch Rücken. <strong><span id="powCount"></span> Touren</strong> haben so einen Hang, insgesamt erfüllen <strong><span id="hangCount"></span> Hänge</strong> die Kriterien.</p>
+          <p>Wir haben das digitale Höhenmodell der ganzen Region ausgewertet: gesucht sind lange Hänge mit gleichmässiger Hangneigung um 40° und planarer Hangform. Mit der Lebensraumkarte des BAFU prüfen wir zusätzlich den Untergrund: nur Rasen, Zwergsträucher oder leichtes Geröll, keine Felsen, auf mindestens 40 m Breite. <strong><span id="powCount"></span> Touren</strong> haben so einen Hang, insgesamt erfüllen <strong><span id="hangCount"></span> Hänge</strong> die Kriterien.</p>
           <ul class="crit">
             <li><b>Hangneigung ≈ 40°</b><span>zwischen 34° und 45°</span></li>
             <li><b>Gleichmässig</b><span>Neigungsstreuung höchstens ±3°</span></li>
             <li><b>Höhendifferenz ≥ 200 Hm</b><span>durchgehend in der Falllinie</span></li>
             <li><b>Planare Hangform</b><span>keine Querneigung, weder Mulde noch Rücken</span></li>
+            <li><b>Hangbreite ≥ 40 m</b><span>auf der ganzen Länge befahrbar</span></li>
+            <li><b>Untergrund</b><span>Rasen oder leichtes Geröll, keine Felsen</span></li>
           </ul>
           <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="cta" href="suche.html?powder=1">Powder-Touren anzeigen</a><button type="button" class="cta dark" id="toExplorer">Im Explorer erkunden</button></div>
           <p class="warn">Hänge ab 30° sind lawinengefährdet. Um 40° nur bei sicheren Verhältnissen – immer das aktuelle Lawinenbulletin prüfen.</p>
@@ -116,7 +118,7 @@
           <path d="M100 270a60 60 0 0 0-14-38" fill="none" stroke="#16406A" stroke-width="2.5"/>
           <text x="112" y="258" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="20" fill="#16406A">40°</text>
           <path d="M40 270H380" stroke="#16406A" stroke-width="2"/>
-          <text x="210" y="300" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#DCE6F2">gleichmässige Hangneigung · planare Hangform</text>
+          <text x="210" y="300" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#DCE6F2">Hangneigung ≈ 40° · ≥ 40 m breit · kein Fels</text>
         </svg>
       </div>
     </section>

@@ -55,4 +55,4 @@ function pref(k,v){try{if(v===undefined)return localStorage.getItem(k);localStor
 /* Karten-Marker */
 function pinIcon(grad,pw){return L.divIcon({className:"",iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-16],html:'<span class="pin pin-'+fam(grad)+(pw?" pw":"")+'"><i>'+esc(grad)+'</i></span>'});}
 function swissLayer(){return L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",{maxZoom:18,attribution:'&copy; <a href="https://www.swisstopo.admin.ch/">swisstopo</a>'});}
-function powText(p){return EXPO_LONG[p.expo]+"-Exposition · "+fmt(p.hm)+" Hm Höhendifferenz · Ø "+String(p.neig).replace(".",",")+"° Hangneigung (±"+String(p.std).replace(".",",")+"°) · "+fmt(p.von)+"–"+fmt(p.bis)+" m";}
+function powText(p){return EXPO_LONG[p.expo]+"-Exposition · "+fmt(p.hm)+" Hm Höhendifferenz · Ø "+String(p.neig).replace(".",",")+"° Hangneigung (±"+String(p.std).replace(".",",")+"°) · "+fmt(p.von)+"–"+fmt(p.bis)+" m · ≥ 40 m breit · Untergrund "+p.rasen+" % Rasen"+(p.rasen<100?", "+(100-p.rasen)+" % Geröll":"")+", kein Fels";}
