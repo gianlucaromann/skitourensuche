@@ -31,21 +31,26 @@
       <p class="lead">Entdecke Gipfel rund um Davos auf der interaktiven Karte – vom gemütlichen Einsteigerberg bis zum perfekten 40°-Powder-Hang.</p>
       <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="suche.html">Touren suchen</a><a class="cta ghost" href="#karte">Zur Karte</a><a class="cta ghost" href="#powder">❄ Powder-Finder</a><button type="button" class="cta ghost" id="rnd">Zufallstour</button></div>
     </div>
-    <svg class="range2" viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <svg class="range2" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <defs>
-        <linearGradient id="gB" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="250"><stop offset="0" stop-color="#8FB1D8" stop-opacity=".62"/><stop offset=".55" stop-color="#6F95C0" stop-opacity=".3"/><stop offset="1" stop-color="#6F95C0" stop-opacity="0"/></linearGradient>
-        <linearGradient id="gF" gradientUnits="userSpaceOnUse" x1="0" y1="80" x2="0" y2="258"><stop offset="0" stop-color="#4279B3"/><stop offset=".5" stop-color="#2F629A" stop-opacity=".85"/><stop offset="1" stop-color="#2A5788" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gB" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="410"><stop offset="0" stop-color="#93B5DB" stop-opacity=".62"/><stop offset=".6" stop-color="#6F95C0" stop-opacity=".28"/><stop offset="1" stop-color="#6F95C0" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gF" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="418"><stop offset="0" stop-color="#4A82BD"/><stop offset=".55" stop-color="#2F629A" stop-opacity=".9"/><stop offset="1" stop-color="#2A5788" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#05121F" stop-opacity=".28"/></linearGradient>
         <radialGradient id="gM"><stop offset="0" stop-color="#E0B771" stop-opacity=".5"/><stop offset="1" stop-color="#E0B771" stop-opacity="0"/></radialGradient>
-        <mask id="hm" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="260"><path class="hmask" pathLength="1" d="M742 232 796 206 770 192 820 168 870 150 845 138 885 124 872 121 898 104" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/></mask>
+        <mask id="hm" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="420"><path class="hmask" pathLength="1" d="M900 380 960 330 930 300 990 250 965 225 1020 170 1005 150 1050 105 1040 92 1078 44" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/></mask>
       </defs>
-      <g class="r-sun"><circle cx="1240" cy="46" r="64" fill="url(#gM)"/><circle cx="1240" cy="46" r="20" fill="#E0B771"/></g>
-      <path class="r-back" d="M0 160 120 90l100 40 140-90 110 80 90-40 140 60 120-80 120 70 120-60 120 50 120-70 140 60v150H0Z" fill="url(#gB)"/>
+      <g class="r-sun"><circle cx="1190" cy="58" r="70" fill="url(#gM)"/><circle cx="1190" cy="58" r="20" fill="#E0B771"/></g>
+      <g class="r-back">
+        <path d="M-90 300 60 250l110 35 160-80 110 45 120-35 140 40 160-135 100 55 100-80 110 55 130-90 100 60 120-30V420H-90Z" fill="url(#gB)"/>
+        <path d="M1060 95l40 20-12-2-10 8-12-8-14 6-17-4Z M1300 60l42 25-12-2-12 9-12-8-14 6-14-6-14 1Z" fill="#E8F0F8" opacity=".75"/>
+      </g>
       <g class="r-front">
-        <path d="M0 190 140 120l120 50 160-90 120 80 120-50 120 65 120-75 130 65 120-70 140 65 150-40v140H0Z" fill="url(#gF)"/>
-        <path d="M0 190 140 120l120 50 160-90 120 80 120-50 120 65 120-75 130 65 120-70 140 65 150-40" fill="none" stroke="#A9C6E6" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M420 80 448 99l-12-3-10 8-12-7-10 4-12-5Z M900 100l24 12-10-2-9 7-9-6-10 4-10 0Z M1150 95l26 12-11-2-9 7-10-6-10 5-10-2Z M140 120l22 12-9-1-8 6-9-5-9 3-9-2Z M660 110l20 10-8-1-8 6-8-5-8 3-8-3Z" fill="#F4F8FC"/>
-        <path d="M742 232 796 206 770 192 820 168 870 150 845 138 885 124 872 121 898 104" fill="none" stroke="#E0B771" stroke-width="2.6" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#hm)"/>
-        <circle class="summit" cx="899" cy="102" r="3.5" fill="#E0B771"/>
+        <path d="M-90 340 90 290l120 30 170-75 140 55 130-30 130 40 300-270 120 110 70-30 110 90 140-40V420H-90Z" fill="url(#gF)"/>
+        <path d="M1080 40 1200 150l70-30 110 90 140-40V420H1080Z" fill="url(#gS)"/>
+        <path d="M-90 340 90 290l120 30 170-75 140 55 130-30 130 40 300-270 120 110 70-30 110 90 140-40" fill="none" stroke="#B4CEEA" stroke-opacity=".6" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M1080 40l44 40-14-4-12 12-12-10-14 12-14-10-22 0Z M380 245l51 20-13-2-12 9-12-8-12 9-14-8-33 0Z M1270 120l24 20-10-2-8 8-10-7-10 5-9-4Z M90 290l26 7-9 1-7 6-8-5-9 3-9-1Z" fill="#F4F8FC"/>
+        <path d="M900 380 960 330 930 300 990 250 965 225 1020 170 1005 150 1050 105 1040 92 1078 44" fill="none" stroke="#E0B771" stroke-width="2.8" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#hm)"/>
+        <circle class="summit" cx="1080" cy="42" r="4" fill="#E0B771"/>
       </g>
     </svg>
   </header>

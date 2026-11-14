@@ -313,3 +313,20 @@ body.land{background:#0B2238}
 .land .topbar.scrolled{background:rgba(7,23,38,.84)}
 @media (max-width:600px){.land .hero{padding-bottom:190px}.range2{height:190px}.land .wrap{margin-top:-24px}}
 @media (prefers-reduced-motion:reduce){.hmask,.tmask{stroke-dashoffset:0!important;transition:none!important}.summit{opacity:1;animation:none!important}.trail .tdot{opacity:1}.hero-in>*,.ctl:not([hidden]){animation:none}.range2 *{transition:none!important;transform:none!important}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+/* ===== v6: Header ohne Abschnitt ===== */
+/* Grafiken skalieren mit der Breite und werden nie oben abgeschnitten (Höhe = Breite × Seitenverhältnis) */
+.range{height:max(15.28vw,220px)}
+.hero{padding-bottom:calc(max(15.28vw,220px) - 30px)}
+.range2{height:max(29.17vw,240px);overflow:visible}
+.land .hero{padding-top:128px;padding-bottom:calc(max(29.17vw,240px)*.46 + 24px)}
+.land .hero h1{font-size:clamp(40px,4.3vw,70px)!important;max-width:none!important;letter-spacing:-.025em!important;text-wrap:balance}
+.land .hero .lead{font-size:clamp(17px,1.25vw,20px);max-width:36em}
+.land .hero-in{gap:20px}
+@media (min-width:1600px){.land .hero-in,.topbar .brand,.wrap{max-width:1360px}}
+@media (min-width:701px) and (max-width:1279px){.land .hero{padding-bottom:calc(max(29.17vw,240px)*.6 + 24px)}}
+@media (max-width:700px){
+  .range2{height:240px;width:823px;left:auto;right:-73px}
+  .land .hero{padding-top:132px;padding-bottom:236px}
+}
+@media (max-width:600px){.range{height:150px}.hero{padding-bottom:150px}}
