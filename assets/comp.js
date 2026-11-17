@@ -117,6 +117,11 @@ function routeTool(map){
 var EXPBTN='<button type="button" class="sexp" aria-expanded="false" title="Legende ein-/ausklappen" aria-label="Legende ein-/ausklappen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
 function legMax(map,box){try{var h=map.getContainer().clientHeight,t=box.getBoundingClientRect().top-map.getContainer().getBoundingClientRect().top;box.style.setProperty("--legmax",Math.max(120,h-t-30)+"px");}catch(e){}}
 function legGroup(map,me){map._legs=map._legs||[];map._legs.push(me);return function(){map._legs.forEach(function(o){if(o!==me)o.close();});};}
+function mapBar(map){
+  if(map._bar)return map._bar;var c=map.getContainer(),bar=document.createElement("div");bar.className="mapbar";
+  c.parentNode.insertBefore(bar,c.nextSibling);map._bar=bar;return bar;
+}
+function placeCtl(map,box){if(window.innerWidth<700){mapBar(map).appendChild(box);box.classList.add("inbar");}}
 function legOpen(k){var v=pref(k);return v===null||v===undefined?window.innerWidth>=700:v==="1";}
 var SLOPE_CLS=[["30–35°","#F2E50A"],["35–40°","#F46F24"],["40–45°","#DE055B"],["45–50°","#C889BB"],["über 50°","#4B4B4B"]];
 function slopeControl(map){
@@ -136,7 +141,7 @@ function slopeControl(map){
     btn.addEventListener("click",function(){set(!on);});
     rng.addEventListener("input",function(){lay.setOpacity(rng.value/100);});
     return box;}});
-  new C().addTo(map);set(on);
+  new C().addTo(map);placeCtl(map,box);set(on);
   return {layer:lay,set:set};
 }
 
@@ -194,7 +199,7 @@ function bulletinControl(map){
     exp.addEventListener("click",function(){open=!open;pref("skt-law-leg",open?"1":"0");if(open)others();vis();});
     L.DomEvent.disableClickPropagation(box);L.DomEvent.disableScrollPropagation(box);
     btn.addEventListener("click",function(){set(!on);});return box;}});
-  new C().addTo(map);if(on)set(true);
+  new C().addTo(map);placeCtl(map,box);if(on)set(true);
   map.attributionControl.addAttribution('Lawinenbulletin &copy; <a href="https://www.slf.ch/" target="_blank" rel="noopener">SLF</a>');
   return {set:set};
 }
