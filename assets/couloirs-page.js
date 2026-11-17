@@ -7,14 +7,14 @@ var nReg=C_REGIONS.filter(function(r){return COULOIRS.some(function(c){return c.
 $("cstats").innerHTML=[[COULOIRS.length,"","Couloirs"],[nReg,"","Regionen"],[hiC.hoehe," m","höchster Einstieg: "+esc(hiC.berg)],[stC.steil,"°","steilste Stelle: "+esc(stC.berg)]]
   .map(function(x){return '<div class="statc reveal"><b>'+fmt(x[0])+x[1]+'</b><span>'+x[2]+'</span></div>';}).join("");
 // Karte
-var map=L.map("map",{scrollWheelZoom:false});swissLayer().addTo(map);slopeControl(map);
+var map=L.map("map",{scrollWheelZoom:false});swissLayer().addTo(map);slopeControl(map);bulletinControl(map);
 var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();});
 IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-go]");if(a){e.preventDefault();goCard(a.dataset.go);}});
 /* Antippen: auf das Couloir zoomen, Einstieg (Gipfel), Zwischenpunkt und Ende markieren – keine Routenlinie */
 function focusC(g){
   var c=g[0],pts=[{ll:[c.lat,c.lon],label:"Einstieg: "+c.berg,kind:"start"}];
   g.forEach(function(x){if(x.via)pts.push({ll:x.via.ll,label:x.via.n,kind:"via"});if(x.ende&&!pts.some(function(p){return p.label==="Ende: "+x.ende.n;}))pts.push({ll:x.ende.ll,label:"Ende: "+x.ende.n,kind:"ende"});});
-  IP.show(cmarks[c.id]._html);RT.points(pts,{pad:IP.pad()});
+  IP.show(cmarks[c.id]._html+lawLine(c.lat,c.lon));RT.points(pts,{pad:IP.pad()});
 }
 map.on("click",function(){map.scrollWheelZoom.enable();});map.on("mouseout",function(){map.scrollWheelZoom.disable();});
 var groups={};COULOIRS.forEach(function(c){var k=c.lat+","+c.lon;(groups[k]=groups[k]||[]).push(c);});
@@ -31,7 +31,7 @@ function card(c){
   return '<article class="ccard reveal in" id="c-'+c.id+'" data-cid="'+c.id+'" style="view-transition-name:c-'+c.id+'">'+
     '<div class="ctop"><div><span class="creg">'+esc(c.region)+'</span><h3>'+esc(c.berg)+'</h3><p>'+esc(c.name)+'</p></div><span class="g g-'+gfam(c.grad)+'">'+esc(c.grad)+'</span></div>'+
     '<div class="cstat"><div><span>Steilheit</span><b>'+esc(c.neig)+'</b></div><div><span>Exposition</span><b>'+(c.expo?EXPO_LONG[c.expo]:"prüfen")+'</b></div><div><span>Höhendifferenz</span><b>'+(c.hm?"ca. "+fmt(c.hm)+" Hm":"–")+'</b></div><div><span>Gipfel</span><b>'+fmt(c.hoehe)+' m</b></div></div>'+
-    '<p class="ctext">'+esc(c.text)+'</p>'+
+    '<p class="ctext">'+esc(c.text)+'</p>'+lawLine(c.lat,c.lon)+
     '<dl class="cdl"><dt>Zugang</dt><dd>'+esc(c.zugang)+'</dd><dt>Achtung</dt><dd class="warnt">'+esc(c.achtung)+'</dd></dl>'+
     '<div class="cfoot"><a href="'+c.quelle.u+'" target="_blank" rel="noopener">Quelle: '+esc(c.quelle.t)+' ↗</a><button type="button" class="btn" data-fly="'+c.id+'">Auf der Karte</button></div></article>';
 }
@@ -57,3 +57,5 @@ $("cards").addEventListener("mouseover",function(e){var c=e.target.closest("[dat
 $("cards").addEventListener("mouseout",function(e){var c=e.target.closest("[data-cid]");if(c&&!c.contains(e.relatedTarget))hl(c.dataset.cid,false);});
 render();
 map.fitBounds(COULOIRS.map(function(c){return [c.lat,c.lon];}),{padding:[40,40]});
+
+loadLawinen().then(function(d){if(d)render();});

@@ -26,3 +26,6 @@ Grundlagen: Höhenmodell swisstopo (30-m-Raster), Lebensraumkarte Schweiz (BAFU/
 
 ## Routen auf der Karte
 `assets/routes.js` enthält pro Tour die Aufstiegsroute (bzw. Abfahrt), berechnet als kürzester Weg vom Startpunkt zum Gipfel entlang des Skitourennetzes der Landeskarte (swisstopo, Layer `ch.swisstopo-karto.skitouren`). Gestrichelt: Verbindung ausserhalb des Netzes. Touren ohne passendes Netz (oder mit unplausiblem Umweg) haben keine Route.
+
+## Lawinenbulletin
+Der Workflow `.github/workflows/lawinen.yml` holt viermal täglich (kurz nach 8 und 17 Uhr) das aktuelle Lawinenbulletin des SLF (Open Data, CC BY 4.0) und die EAWS-Warnregionen mit `tools/lawinen.py`, speichert `data/lawinen.json` und veröffentlicht die Seite neu. Manuell starten: Actions → „Lawinenbulletin aktualisieren“ → Run workflow.

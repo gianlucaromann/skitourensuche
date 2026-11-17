@@ -113,21 +113,88 @@ function routeTool(map){
 }
 
 /* Hangneigung ab 30° (swisstopo, Klassen gemäss SLF) als zuschaltbare Ebene mit Legende */
+/* Legende separat auf-/zuklappbar; auf dem Handy standardmässig zu */
+var EXPBTN='<button type="button" class="sexp" aria-expanded="false" title="Legende ein-/ausklappen" aria-label="Legende ein-/ausklappen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+function legMax(map,box){try{var h=map.getContainer().clientHeight,t=box.getBoundingClientRect().top-map.getContainer().getBoundingClientRect().top;box.style.setProperty("--legmax",Math.max(120,h-t-30)+"px");}catch(e){}}
+function legGroup(map,me){map._legs=map._legs||[];map._legs.push(me);return function(){map._legs.forEach(function(o){if(o!==me)o.close();});};}
+function legOpen(k){var v=pref(k);return v===null||v===undefined?window.innerWidth>=700:v==="1";}
 var SLOPE_CLS=[["30–35°","#F2E50A"],["35–40°","#F46F24"],["40–45°","#DE055B"],["45–50°","#C889BB"],["über 50°","#4B4B4B"]];
 function slopeControl(map){
   var lay=L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.hangneigung-ueber_30/default/current/3857/{z}/{x}/{y}.png",{maxZoom:18,opacity:.6,zIndex:5,attribution:'Hangneigung &copy; <a href="https://www.swisstopo.admin.ch/">swisstopo</a>'});
-  var on=pref("skt-slope")==="1",box,btn,leg,rng;
-  function set(v){on=v;pref("skt-slope",v?"1":"0");if(v)lay.addTo(map);else map.removeLayer(lay);btn.setAttribute("aria-pressed",v);box.classList.toggle("on",v);leg.hidden=!v;}
+  var on=pref("skt-slope")==="1",box,btn,leg,rng,exp,others=null,open=legOpen("skt-slope-leg");
+  function vis(){exp.hidden=!on;exp.setAttribute("aria-expanded",open);exp.classList.toggle("up",open);leg.hidden=!(on&&open);legMax(map,box);}
+  function set(v){on=v;pref("skt-slope",v?"1":"0");if(v)lay.addTo(map);else map.removeLayer(lay);btn.setAttribute("aria-pressed",v);box.classList.toggle("on",v);if(v&&open&&others)others();vis();}
   var C=L.Control.extend({options:{position:"topright"},onAdd:function(){
-    box=L.DomUtil.create("div","slopectl leaflet-bar");
-    box.innerHTML='<button type="button" aria-pressed="false" title="Hangneigung ab 30° ein-/ausblenden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20 10 6l4 6 2-3 6 11Z" fill="currentColor"/></svg><span>Hangneigung</span></button>'+
+    box=L.DomUtil.create("div","slopectl");
+    box.innerHTML='<div class="srow"><button type="button" class="smain" aria-pressed="false" title="Hangneigung ab 30° ein-/ausblenden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20 10 6l4 6 2-3 6 11Z" fill="currentColor"/></svg><span>Hangneigung</span></button>'+EXPBTN+'</div>'+
       '<div class="sleg" hidden><b>Hangneigung</b>'+SLOPE_CLS.map(function(c){return '<span><i style="background:'+c[1]+'"></i>'+c[0]+'</span>';}).join("")+
       '<label>Deckkraft<input type="range" min="20" max="90" value="60"></label><small>Steilheit ist nicht gleich Lawinengefahr – immer das aktuelle Lawinenbulletin prüfen.</small></div>';
-    btn=box.querySelector("button");leg=box.querySelector(".sleg");rng=box.querySelector("input");
+    btn=box.querySelector(".smain");exp=box.querySelector(".sexp");leg=box.querySelector(".sleg");rng=box.querySelector("input");
+    others=legGroup(map,{close:function(){if(on&&open){open=false;vis();}}});
+    exp.addEventListener("click",function(){open=!open;pref("skt-slope-leg",open?"1":"0");if(open)others();vis();});
     L.DomEvent.disableClickPropagation(box);L.DomEvent.disableScrollPropagation(box);
     btn.addEventListener("click",function(){set(!on);});
     rng.addEventListener("input",function(){lay.setOpacity(rng.value/100);});
     return box;}});
   new C().addTo(map);set(on);
   return {layer:lay,set:set};
+}
+
+/* ===== Lawinenbulletin (SLF, Open Data CC BY 4.0) – Daten holt ein GitHub-Workflow nach data/lawinen.json ===== */
+var LAW=null,LAWP=null;
+var DANGER={1:{n:"gering",c:"#CCFF66"},2:{n:"mässig",c:"#FFFF00"},3:{n:"erheblich",c:"#FF9900"},4:{n:"gross",c:"#FF0000"},5:{n:"sehr gross",c:"#A80000"}};
+var PROBLEM={new_snow:"Neuschnee",wind_slab:"Triebschnee",persistent_weak_layers:"Altschnee",wet_snow:"Nassschnee",gliding_snow:"Gleitschnee",favourable_situation:"Günstige Situation",no_distinct_avalanche_problem:"Kein ausgeprägtes Lawinenproblem"};
+function loadLawinen(){
+  if(!LAWP)LAWP=fetch("data/lawinen.json?t="+Math.floor(Date.now()/600000)).then(function(r){return r.ok?r.json():null;})
+    .then(function(d){LAW=d&&d.regions&&Object.keys(d.regions).length?d:null;return LAW;}).catch(function(){return null;});
+  return LAWP;
+}
+function pip(x,y,ring){var c=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];
+  if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;}
+function lawRegion(lat,lon){
+  if(!LAW)return null;
+  for(var i=0;i<LAW.polygons.length;i++){var p=LAW.polygons[i];
+    for(var k=0;k<p.poly.length;k++)if(pip(lon,lat,p.poly[k][0])&&LAW.regions[p.id])return {id:p.id,b:LAW.regions[p.id]};}
+  return null;
+}
+function hText(v){if(v==null)return "";return v==="treeline"?"Waldgrenze":fmt(+v)+" m";}
+function ratingText(r){var e=r.lower&&r.upper?" ("+hText(r.lower)+"–"+hText(r.upper)+")":r.lower?" (oberhalb "+hText(r.lower)+")":r.upper?" (unterhalb "+hText(r.upper)+")":"";
+  return r.level+" – "+(DANGER[r.level]?DANGER[r.level].n:"?")+e+(r.time&&r.time!=="all_day"?(r.time==="earlier"?", vormittags":", nachmittags"):"");}
+function lawBadge(l){var d=DANGER[l];return d?'<span class="lwb" style="background:'+d.c+'" title="Gefahrenstufe '+l+' – '+d.n+'">'+l+'</span>':'';}
+function lawWhen(b){try{var e=new Date(b.valid&&b.valid.endTime),s=new Date(b.published);
+  var f=function(d){return d.toLocaleString("de-CH",{weekday:"short",day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"});};
+  return {txt:"Ausgabe "+f(s)+", gültig bis "+f(e),old:Date.now()>e.getTime()};}catch(x){return {txt:"",old:false};}}
+function probList(b){var seen={};return (b.problems||[]).filter(function(p){if(seen[p.type])return false;seen[p.type]=1;return true;}).map(function(p){
+  return '<span class="lwp">'+esc(PROBLEM[p.type]||p.type)+(p.lower?' · ab '+hText(p.lower):'')+(p.upper?' · bis '+hText(p.upper):'')+(p.aspects&&p.aspects.length&&p.aspects.length<8?' · '+p.aspects.map(function(a){return EXPO_DE[a]||a;}).join(", "):'')+'</span>';}).join("");}
+function lawDetail(rid,b,short){
+  var w=lawWhen(b);
+  return '<div class="lwd"><div class="lwh">'+lawBadge(b.max)+'<div><b>'+esc(b.name||rid)+'</b><span>'+(b.ratings||[]).map(ratingText).map(esc).join(" · ")+'</span></div></div>'+
+    (b.problems&&b.problems.length?'<div class="lwps">'+probList(b)+'</div>':'')+
+    (!short&&b.snowpack?'<p>'+esc(b.snowpack)+'</p>':'')+
+    '<small class="'+(w.old?'lwold':'')+'">'+esc(w.txt)+(w.old?' – veraltet':'')+' · Quelle: <a href="'+(LAW&&LAW.url||"https://www.slf.ch")+'" target="_blank" rel="noopener">SLF</a></small></div>';
+}
+function lawLine(lat,lon){var r=lawRegion(lat,lon);if(!r)return LAW?'':'';return '<div class="lwline"><span class="lwtag">Lawinenbulletin heute</span>'+lawDetail(r.id,r.b,true)+'</div>';}
+function bulletinControl(map){
+  var lay=L.layerGroup(),on=pref("skt-law")==="1",box,btn,leg,exp,others=null,built=false,open=legOpen("skt-law-leg");
+  function vis(){exp.hidden=!on;exp.setAttribute("aria-expanded",open);exp.classList.toggle("up",open);leg.hidden=!(on&&open);legMax(map,box);}
+  function build(){if(built||!LAW)return;built=true;
+    LAW.polygons.forEach(function(p){var b=LAW.regions[p.id];if(!b)return;var d=DANGER[b.max]||{c:"#999"};
+      p.poly.forEach(function(poly){L.polygon(poly[0].map(function(c){return [c[1],c[0]];}),{color:"#3A3A3A",weight:1,opacity:.6,fillColor:d.c,fillOpacity:.38})
+        .bindPopup('<div class="pop">'+lawDetail(p.id,b,false)+'</div>',{maxWidth:320}).addTo(lay);});});}
+  function set(v){on=v;pref("skt-law",v?"1":"0");box.classList.toggle("on",v);btn.setAttribute("aria-pressed",v);if(v&&open&&others)others();vis();
+    if(!v){map.removeLayer(lay);return;}
+    loadLawinen().then(function(){if(!LAW){leg.innerHTML='<small>Zurzeit kein Lawinenbulletin verfügbar.</small>';return;}build();if(on)lay.addTo(map);
+      var any=LAW.regions[Object.keys(LAW.regions)[0]],w=lawWhen(any);
+      leg.innerHTML='<b>Lawinengefahr</b>'+[1,2,3,4,5].map(function(l){return '<span><i style="background:'+DANGER[l].c+'"></i>'+l+' – '+DANGER[l].n+'</span>';}).join("")+'<small>'+esc(w.txt)+(w.old?' – veraltet':'')+'. Region antippen für Details. Quelle: <a href="'+LAW.url+'" target="_blank" rel="noopener">SLF</a></small>';});}
+  var C=L.Control.extend({options:{position:"topright"},onAdd:function(){
+    box=L.DomUtil.create("div","slopectl lawctl");
+    box.innerHTML='<div class="srow"><button type="button" class="smain" aria-pressed="false" title="Lawinenbulletin ein-/ausblenden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 22 20H2Z" fill="currentColor"/><path d="M12 9v5M12 16.5v.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg><span>Lawinenbulletin</span></button>'+EXPBTN+'</div><div class="sleg" hidden></div>';
+    btn=box.querySelector(".smain");exp=box.querySelector(".sexp");leg=box.querySelector(".sleg");
+    others=legGroup(map,{close:function(){if(on&&open){open=false;vis();}}});
+    exp.addEventListener("click",function(){open=!open;pref("skt-law-leg",open?"1":"0");if(open)others();vis();});
+    L.DomEvent.disableClickPropagation(box);L.DomEvent.disableScrollPropagation(box);
+    btn.addEventListener("click",function(){set(!on);});return box;}});
+  new C().addTo(map);if(on)set(true);
+  map.attributionControl.addAttribution('Lawinenbulletin &copy; <a href="https://www.slf.ch/" target="_blank" rel="noopener">SLF</a>');
+  return {set:set};
 }

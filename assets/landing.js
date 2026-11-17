@@ -19,7 +19,7 @@ var map=L.map("map",{scrollWheelZoom:false}).setView([46.8,9.85],10);
 var swiss=swissLayer().addTo(map);
 var osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 L.control.layers({"Landeskarte":swiss,"OpenStreetMap":osm},null,{position:"topright"}).addTo(map);
-slopeControl(map);
+slopeControl(map);bulletinControl(map);
 map.on("click",function(){map.scrollWheelZoom.enable();});
 map.on("mouseout",function(){map.scrollWheelZoom.disable();});
 var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();}),mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;
@@ -50,7 +50,7 @@ function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{pad
     hItems.push({h:h,l:l,layers:[c,l,d]});
   });
 })();
-function focusGroup(g,m,instant){map.closePopup();IP.show(m._html);RT.show(g,{pad:IP.pad(),instant:instant});}
+function focusGroup(g,m,instant){map.closePopup();IP.show(m._html+lawLine(g[0].lat,g[0].lon));RT.show(g,{pad:IP.pad(),instant:instant});}
 function hcol(n){return n<37?"#E0B771":(n<39.5?"#C77A14":"#B83232");}
 function hangPop(h){var t=h.t&&TOURS.filter(function(x){return x.id===h.t;})[0];
   return '<div class="pop"><h3>'+EXPO_LONG[h.expo]+'hang '+(h.d<400?'am ':'bei ')+esc(h.n)+'</h3><p class="hh">'+fmt(h.von)+'–'+fmt(h.bis)+' m ü. M.</p>'+
@@ -107,3 +107,22 @@ if(typeof COULOIRS!=="undefined"&&$("cMini")){
   $("cMini").innerHTML=COULOIRS.slice().sort(function(a,b){return b.hoehe-a.hoehe;}).slice(0,5).map(function(c){
     return '<li><a href="couloirs.html#c-'+c.id+'"><span class="g g-'+c.grad.replace(/[+-]/g,"")+'">'+esc(c.grad)+'</span><b>'+esc(c.berg)+'</b><span>'+esc(c.name)+' · '+esc(c.region)+'</span></a></li>';}).join("");
 }
+
+/* Lawinenbulletin heute – Übersicht pro Gebiet */
+loadLawinen().then(function(){
+  var grid=$("lawGrid"),meta=$("lawMeta");if(!grid)return;
+  if(!LAW){meta.textContent="Zurzeit ist kein aktuelles Lawinenbulletin verfügbar. Bitte direkt beim SLF nachsehen.";grid.innerHTML="";return;}
+  var areas=REGIONS.map(function(r){return {n:r,pts:TOURS.filter(function(t){return t.region===r;})};});
+  if(typeof COULOIRS!=="undefined")C_REGIONS.forEach(function(r){if(REGIONS.indexOf(r)<0){var p=COULOIRS.filter(function(c){return c.region===r;});if(p.length)areas.push({n:r,pts:p,c:1});}});
+  var any=null;
+  grid.innerHTML=areas.map(function(a){
+    var hit={};a.pts.forEach(function(p){var r=lawRegion(p.lat,p.lon);if(r)hit[r.id]=r.b;});
+    var ids=Object.keys(hit);if(!ids.length)return "";
+    var top=ids.map(function(k){return hit[k];}).sort(function(x,y){return y.max-x.max;})[0];any=top;
+    var d=DANGER[top.max]||{c:"#999",n:"?"};
+    return '<div class="lawcard reveal in" style="--lc:'+d.c+'"><div class="lch">'+lawBadge(top.max)+'<div><b>'+esc(a.n)+'</b><div class="lcl">'+d.n+' · '+(top.ratings||[]).map(function(r){return r.lower?"oberhalb "+hText(r.lower):r.upper?"unterhalb "+hText(r.upper):"";}).filter(Boolean).join(", ")+'</div></div></div>'+
+      (top.problems&&top.problems.length?'<div class="lwps">'+probList(top)+'</div>':'')+
+      '<small>SLF-Region'+(ids.length>1?'en':'')+': '+ids.map(function(k){return esc(hit[k].name||k);}).join(", ")+(a.c?' · Couloirs':'')+'</small></div>';
+  }).join("");
+  if(any){var w=lawWhen(any);meta.className="lawmeta"+(w.old?" old":"");meta.innerHTML=esc(w.txt)+(w.old?" – veraltet, bitte direkt beim SLF prüfen":"")+'. Angezeigt ist die höchste Stufe der Warnregionen, in denen die Gipfel liegen. Quelle: <a href="'+LAW.url+'" target="_blank" rel="noopener">WSL-Institut für Schnee- und Lawinenforschung SLF</a> (CC BY 4.0).';}
+});

@@ -402,3 +402,47 @@ body.land{background:#0B2238}
 .sleg input{width:100%;accent-color:#C9974A}
 .sleg small{font:400 10.5px/1.35 Inter,sans-serif;color:#8A4A06;margin-top:2px}
 @media (max-width:600px){.slopectl{max-width:170px}.sleg small{display:none}}
+/* Lawinenbulletin */
+.lawctl button svg{color:#FF9900}
+.lawctl.on button svg{color:#FF9900}
+.lwb{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;border-radius:8px;font:800 16px/1 'Space Grotesk',sans-serif;color:#13202B;border:1px solid rgba(0,0,0,.18);flex:none}
+.lwd{display:flex;flex-direction:column;gap:7px;font:400 13px/1.45 Inter,sans-serif;color:#2B3A47}
+.lwh{display:flex;gap:10px;align-items:flex-start}
+.lwh b{display:block;font:600 14px/1.25 Inter,sans-serif;color:#0F2A44}
+.lwh span{font:500 12.5px/1.35 Inter,sans-serif;color:#2B3A47}
+.lwps{display:flex;flex-wrap:wrap;gap:5px}
+.lwp{font:600 11.5px/1.2 Inter,sans-serif;background:#EEF2F6;border-radius:999px;padding:4px 9px;color:#2B3A47}
+.lwd p{margin:0}
+.lwd small{font:400 11px/1.35 Inter,sans-serif;color:#5A6976}.lwd small a{color:#1F5FA8}
+.lwold{color:#B83232!important}
+.lwline{margin-top:10px;padding-top:10px;border-top:1px solid #EDF0F3}
+.lwtag{display:block;font:700 10.5px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#8A5E1E;margin-bottom:7px}
+.lawgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:14px}
+.lawcard{display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 18px;color:#E6EEF6;position:relative;overflow:hidden}
+.lawcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--lc)}
+.lawcard .lch{display:flex;gap:12px;align-items:center}
+.lawcard .lwb{min-width:42px;height:42px;font-size:22px;border-radius:10px}
+.lawcard b{font:700 18px/1.15 'Space Grotesk',sans-serif;color:#FFF}
+.lawcard .lcl{font:600 13px/1.3 Inter,sans-serif;color:#DCE6F2}
+.lawcard .lwp{background:rgba(255,255,255,.1);color:#E6EEF6}
+.lawcard small{font:400 11.5px/1.35 Inter,sans-serif;color:#9FB4C8}
+.lawmeta{margin:0;font:400 14px/1.5 Inter,sans-serif;color:#C8D5E3}.lawmeta a{color:#E0B771}
+.lawmeta.old{color:#F2A2A2}
+.card .lwline{margin-top:0;border-top:none;padding:10px 12px;background:#F7F9FB;border-radius:10px}
+.ccard .lwline{border-top:1px solid rgba(255,255,255,.12);padding-top:12px;margin-top:0}
+.ccard .lwline .lwtag{color:#E0B771}.ccard .lwd,.ccard .lwh span{color:#DCE6F2}.ccard .lwh b{color:#FFF}.ccard .lwp{background:rgba(255,255,255,.1);color:#E6EEF6}.ccard .lwd small{color:#9FB4C8}.ccard .lwd small a{color:#E0B771}
+.srow{display:flex;align-items:stretch}
+.srow .smain{flex:1}
+.sexp{display:flex;align-items:center;justify-content:center;width:36px;border:none;border-left:1px solid rgba(255,255,255,.18);background:#0B2238;color:#FFF;cursor:pointer;padding:0}
+.sexp[hidden]{display:none}
+.sexp svg{width:16px;height:16px;transition:transform .2s}
+.sexp.up svg{transform:rotate(180deg)}
+.sexp:hover{background:#16406A}
+.slopectl button:focus-visible{outline:3px solid #7FB0E8;outline-offset:-3px}
+.slopectl+.slopectl{margin-top:8px}
+@media (max-width:600px){.slopectl{max-width:200px}.slopectl .smain{padding:8px 9px;font-size:12px}}
+/* Legende neben dem Schalter statt darunter: verdrängt keine anderen Schalter */
+.slopectl{position:relative;overflow:visible!important;background:transparent!important;border:none!important;box-shadow:none!important}
+.slopectl .srow{border-radius:10px;overflow:hidden;background:#FFF;box-shadow:0 1px 5px rgba(0,0,0,.4)}
+.slopectl .sleg{position:absolute;top:0;right:calc(100% + 8px);width:190px;max-height:var(--legmax,260px);overflow:auto;background:rgba(255,255,255,.97);border-radius:10px;box-shadow:0 6px 20px rgba(5,20,35,.3);z-index:2}
+@media (max-width:600px){.slopectl .sleg{width:150px;padding:8px 10px 10px;gap:4px}.slopectl .sleg i{width:14px;height:10px}}

@@ -48,7 +48,7 @@ function card(t){
     '<span style="display:flex;gap:6px;align-items:center;flex:none"><button type="button" class="favb'+(fv?' on':'')+'" data-fav="'+t.id+'" aria-pressed="'+fv+'" aria-label="'+esc(t.gipfel)+(fv?' von der Merkliste entfernen':' merken')+'">'+(fv?'♥':'♡')+'</button>'+(t.pow?'<span class="g g-P" title="Powder-Hang">❄</span>':'')+'<span class="g g-'+fam(t.grad)+'">'+esc(t.grad)+'</span></span></div>'+
     '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-top:1px solid #EDF0F3;border-bottom:1px solid #EDF0F3;padding:12px 0">'+
     '<div class="stat"><span>Aufstieg</span><span>'+(t.auf==null?"–":ap+fmt(t.auf)+" Hm")+'</span></div><div class="stat"><span>Abfahrt</span><span>'+ap+fmt(t.ab)+' Hm</span></div><div class="stat"><span>Zeit</span><span>'+zeit+'</span></div></div>'+
-    '<dl class="kv"><dt>Gipfel</dt><dd>'+fmt(t.hoehe)+' m ü. M.</dd><dt>Start</dt><dd>'+esc(t.start)+'</dd><dt>Ziel</dt><dd>'+esc(t.ziel)+'</dd><dt>Exposition</dt><dd>'+expo+'</dd></dl>'+pw+
+    '<dl class="kv"><dt>Gipfel</dt><dd>'+fmt(t.hoehe)+' m ü. M.</dd><dt>Start</dt><dd>'+esc(t.start)+'</dd><dt>Ziel</dt><dd>'+esc(t.ziel)+'</dd><dt>Exposition</dt><dd>'+expo+'</dd></dl>'+pw+lawLine(t.lat,t.lon)+
     (o?'<div class="det"><p style="margin:0;font:400 14px/1.5 Inter,sans-serif">'+esc(t.text)+'</p><p style="margin:0;font:500 14px/1.5 Inter,sans-serif;color:#8A4A06">Achtung: '+esc(t.key)+'</p>'+
       (t.pow?'<div class="profbox"><b>Hangprofil</b>'+profSVG(t.pow)+'<small>Mit Maus oder Finger über das Profil fahren.</small></div>':'')+
       '<a class="maplink" href="index.html?tour='+t.id+'#karte">Auf der grossen Karte zeigen →</a></div>':'')+
@@ -60,7 +60,7 @@ var smap=null,slayer=null,marks={},lastSig="",firstFit=true,mapOn=pref("skt-map"
 var RT=null,IP=null;
 document.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
 function initMap(){
-  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);slopeControl(smap);IP=infoPanel(smap,function(){RT.restore();});IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
+  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);slopeControl(smap);bulletinControl(smap);IP=infoPanel(smap,function(){RT.restore();});IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
   smap.on("click",function(){smap.scrollWheelZoom.enable();});smap.on("mouseout",function(){smap.scrollWheelZoom.disable();});
 }
 function drawMap(list){
@@ -75,7 +75,7 @@ function drawMap(list){
   Object.keys(groups).forEach(function(k){
     var g=groups[k],t=g[0],m=L.marker([t.lat,t.lon],{title:g.map(function(x){return x.gipfel+" ("+x.grad+")";}).join(", "),icon:pinIcon(t.grad,g.some(function(x){return x.pow;}))}).addTo(slayer);
     m._html=('<div class="pop"><h3>'+esc(t.gipfel)+'</h3>'+g.map(function(x){return '<div class="row"><div><span>'+esc(x.route)+'</span><span class="g g-'+fam(x.grad)+'">'+esc(x.grad)+'</span></div><div><span></span><a href="#t-'+x.id+'" data-goto="'+x.id+'">Zur Beschreibung ↓</a></div></div>';}).join("")+routeInfo(g)+'</div>');
-    m.on("click",function(){IP.show(m._html);RT.show(g,{pad:IP.pad()});g.forEach(function(x){open[x.id]=true;});render();});
+    m.on("click",function(){IP.show(m._html+lawLine(t.lat,t.lon));RT.show(g,{pad:IP.pad()});g.forEach(function(x){open[x.id]=true;});render();});
     g.forEach(function(x){marks[x.id]=m;if(x.pow)L.polyline(x.pow.path,{color:"#C9974A",weight:4,interactive:false}).addTo(slayer);});
     pts.push([t.lat,t.lon]);
   });
@@ -122,3 +122,5 @@ $("share").onclick=function(){var b=this,done=function(t){b.textContent=t;setTim
 document.addEventListener("keydown",function(e){if(e.key==="/"&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){e.preventDefault();$("q").focus();}});
 render();
 if(focusId){var el=$("t-"+focusId);if(el){el.classList.add("flash");el.scrollIntoView({block:"center"});}}
+
+loadLawinen().then(function(d){if(d)render();});
