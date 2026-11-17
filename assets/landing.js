@@ -21,7 +21,7 @@ var osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18
 L.control.layers({"Landeskarte":swiss,"OpenStreetMap":osm},null,{position:"topright"}).addTo(map);
 map.on("click",function(){map.scrollWheelZoom.enable();});
 map.on("mouseout",function(){map.scrollWheelZoom.disable();});
-var mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;
+var RT=routeTool(map),IP=infoPanel(map,function(){RT.clear();}),mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;
 var H0={nMin:34,nMax:45,hMin:200,expos:[]},hs=JSON.parse(JSON.stringify(H0));
 function show(layers,on){layers.forEach(function(l){var el=l.getElement&&l.getElement();if(el)el.classList.toggle("off",!on);if(!on&&l.isPopupOpen&&l.isPopupOpen())l.closePopup();});}
 function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{padding:[40,40],maxZoom:o.max||13});else map.flyToBounds(pts,{padding:[40,40],maxZoom:(o&&o.max)||13,duration:.6});}
@@ -35,7 +35,8 @@ function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{pad
     var html='<div class="pop"><h3>'+esc(t.gipfel)+'</h3><p class="hh">'+fmt(t.hoehe)+' m ü. M. · '+esc(t.region)+'</p>'+g.map(function(x){
       return '<div class="row"><div><span>'+esc(x.route)+'</span><span class="g g-'+fam(x.grad)+'">'+esc(x.grad)+'</span></div><div><span>'+(x.auf==null?"Abfahrt "+fmt(x.ab)+" Hm":"Aufstieg "+(x.det?"":"≈ ")+fmt(x.auf)+" Hm")+'</span><a href="suche.html?tour='+x.id+'">Details →</a></div>'+(x.pow?'<div class="powline">❄ '+EXPO_LONG[x.pow.expo]+' · '+fmt(x.pow.hm)+' Hm · Ø '+x.pow.neig+'°</div>'+profSVG(x.pow):'')+'</div>';}).join("")+'</div>';
     g.forEach(function(x){if(!x.pow)return;extra.push(L.polyline(x.pow.path,{color:"#fff",weight:7,opacity:.9,interactive:false}).addTo(map),L.polyline(x.pow.path,{color:"#C9974A",weight:4,interactive:false}).addTo(map));});
-    var m=L.marker([t.lat,t.lon],{title:t.gipfel,alt:t.gipfel+" ("+t.grad+")",icon:pinIcon(t.grad,g.some(function(x){return x.pow;}))}).bindPopup(html,{minWidth:260,maxWidth:320}).addTo(map);
+    var m=L.marker([t.lat,t.lon],{title:t.gipfel,alt:t.gipfel+" ("+t.grad+")",icon:pinIcon(t.grad,g.some(function(x){return x.pow;}))}).addTo(map);
+    m._html=html+routeInfo(g);m.on("click",function(){focusGroup(g,m);});
     g.forEach(function(x){marks[x.id]=m;});
     tItems.push({g:g,layers:[m].concat(extra),ll:[t.lat,t.lon]});
   });
@@ -48,6 +49,7 @@ function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{pad
     hItems.push({h:h,l:l,layers:[c,l,d]});
   });
 })();
+function focusGroup(g,m,instant){map.closePopup();IP.show(m._html);RT.show(g,{pad:IP.pad(),instant:instant});}
 function hcol(n){return n<37?"#E0B771":(n<39.5?"#C77A14":"#B83232");}
 function hangPop(h){var t=h.t&&TOURS.filter(function(x){return x.id===h.t;})[0];
   return '<div class="pop"><h3>'+EXPO_LONG[h.expo]+'hang '+(h.d<400?'am ':'bei ')+esc(h.n)+'</h3><p class="hh">'+fmt(h.von)+'–'+fmt(h.bis)+' m ü. M.</p>'+
@@ -66,7 +68,7 @@ function drawTours(doFit,o){
 }
 var hVis=[];
 function drawHangs(doFit,o){
-  var pts=[];hVis=[];
+  var pts=[];hVis=[];RT.clear();IP.hide();
   tItems.forEach(function(x){show(x.layers,false);});
   hItems.forEach(function(x){var h=x.h,on=h.neig>=hs.nMin&&h.neig<=hs.nMax&&h.hm>=hs.hMin&&(!hs.expos.length||hs.expos.indexOf(h.expo)>=0);
     show(x.layers,on);if(on){hVis.push(x);pts.push(h.path[0],h.path[3]);}});
@@ -91,13 +93,13 @@ bindRose($("hRose"),function(e){var i=hs.expos.indexOf(e);if(i<0)hs.expos.push(e
 function showTour(id){
   sel=[];onlyPow=false;setMode("T");var m=marks[id];if(!m)return;
   $("karte").scrollIntoView({behavior:"smooth"});
-  map.closePopup();map.once("moveend",function(){m.openPopup();});map.flyTo(m.getLatLng(),13,{duration:1});
+  var it=tItems.filter(function(x){return x.layers[0]===m;})[0];focusGroup(it?it.g:TOURS.filter(function(x){return x.id===id;}),m);
 }
 $("rnd").onclick=function(){showTour(TOURS[Math.floor(Math.random()*TOURS.length)].id);};
 $("toExplorer").onclick=function(){setMode("H");$("karte").scrollIntoView({behavior:"smooth"});};
 draw(true,{instant:true});
 var qt=new URLSearchParams(location.search).get("tour");
-if(qt&&marks[qt]){map.setView(marks[qt].getLatLng(),13);marks[qt].openPopup();}
+if(qt&&marks[qt]){var qi=tItems.filter(function(x){return x.layers[0]===marks[qt];})[0];focusGroup(qi.g,marks[qt],true);}
 /* Teaser: Couloirs */
 if(typeof COULOIRS!=="undefined"&&$("cMini")){
   $("cMini").innerHTML=COULOIRS.slice().sort(function(a,b){return b.hoehe-a.hoehe;}).slice(0,5).map(function(c){

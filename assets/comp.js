@@ -56,3 +56,45 @@ function pref(k,v){try{if(v===undefined)return localStorage.getItem(k);localStor
 function pinIcon(grad,pw){return L.divIcon({className:"",iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-16],html:'<span class="pin pin-'+fam(grad)+(pw?" pw":"")+'"><i>'+esc(grad)+'</i></span>'});}
 function swissLayer(){return L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",{maxZoom:18,attribution:'&copy; <a href="https://www.swisstopo.admin.ch/">swisstopo</a>'});}
 function powText(p){return EXPO_LONG[p.expo]+"-Exposition · "+fmt(p.hm)+" Hm Höhendifferenz · Ø "+String(p.neig).replace(".",",")+"° Hangneigung (±"+String(p.std).replace(".",",")+"°) · "+fmt(p.von)+"–"+fmt(p.bis)+" m · ≥ 40 m breit · Untergrund "+p.rasen+" % Rasen"+(p.rasen<100?", "+(100-p.rasen)+" % Geröll":"")+", kein Fels";}
+
+/* Route einer Tour auf der Karte zeigen und dorthin zoomen */
+function routeLen(r){var p=(r.a||[]).concat(r.l).concat(r.b||[]),d=0;for(var i=1;i<p.length;i++)d+=L.latLng(p[i-1]).distanceTo(p[i]);return d;}
+function routeInfo(g){
+  if(typeof ROUTES==="undefined")return "";
+  return '<div class="rinfo">'+g.map(function(x){var r=ROUTES[x.id];
+    return r?'<span><i class="rdot" style="background:'+RCOL[g.indexOf(x)%RCOL.length]+'"></i>'+(g.length>1?esc(x.route)+': ':'')+'Route ca. '+(Math.round(routeLen(r)/100)/10).toString().replace(".",",")+' km</span>':'<span class="rnone">'+(g.length>1?esc(x.route)+': ':'')+'Keine Route im Skitourennetz der Landeskarte</span>';}).join("")+'</div>';
+}
+var RCOL=["#E0B771","#7FB0E8","#F28B82"];
+/* Info-Leiste am Kartenrand: verdeckt die Route nicht */
+function infoPanel(map,onClose){
+  var el=document.createElement("div");el.className="rpanel";el.hidden=true;el.setAttribute("role","dialog");el.setAttribute("aria-label","Tour-Info");
+  map.getContainer().appendChild(el);L.DomEvent.disableClickPropagation(el);L.DomEvent.disableScrollPropagation(el);
+  el.addEventListener("click",function(e){if(e.target.closest(".rclose")){el.hidden=true;onClose&&onClose();}});
+  return {el:el,show:function(html){el.innerHTML='<button type="button" class="rclose" aria-label="Schliessen">×</button>'+html;el.hidden=false;el.scrollTop=0;},hide:function(){el.hidden=true;},
+    pad:function(){var w=map.getContainer().clientWidth;if(el.hidden)return {tl:[50,50],br:[50,40]};
+      return w>=700?{tl:[el.offsetWidth+40,40],br:[40,40]}:{tl:[30,30],br:[30,el.offsetHeight+30]};}};
+}
+function routeTool(map){
+  var lay=L.layerGroup().addTo(map),COL=RCOL;
+  return {
+    clear:function(){lay.clearLayers();},
+    show:function(g,o){
+      o=o||{};lay.clearLayers();
+      var b=L.latLngBounds([[g[0].lat,g[0].lon]]);
+      g.forEach(function(t,i){
+        var r=typeof ROUTES!=="undefined"&&ROUTES[t.id];if(!r)return;
+        var c=COL[i%COL.length],desc=t.auf==null||/Gipfel/.test(t.start);
+        L.polyline(r.l,{color:"#0B2238",weight:9,opacity:.55,interactive:false}).addTo(lay);
+        L.polyline(r.l,{color:"#fff",weight:7,opacity:.95,interactive:false}).addTo(lay);
+        var line=L.polyline(r.l,{color:c,weight:4.5,opacity:1,interactive:false,className:"rline"}).addTo(lay);
+        [r.a,r.b].forEach(function(x){if(x)L.polyline(x,{color:c,weight:3,dashArray:"2 8",lineCap:"round",interactive:false}).addTo(lay);});
+        var st=desc?(r.b?r.b[1]:r.l[r.l.length-1]):(r.a?r.a[0]:r.l[0]);
+        L.circleMarker(st,{radius:7,color:c,weight:3,fillColor:"#0B2238",fillOpacity:1}).bindTooltip((desc?"Ziel: ":"Start: ")+esc(desc?t.ziel:t.start),{direction:"top",offset:[0,-6]}).addTo(lay);
+        b.extend(line.getBounds());if(r.a)b.extend(r.a);if(r.b)b.extend(r.b);
+      });
+      var p=o.pad||{tl:[50,50],br:[50,40]},opt={paddingTopLeft:p.tl,paddingBottomRight:p.br,maxZoom:14};
+      if(o.instant)map.fitBounds(b,opt);else map.flyToBounds(b,Object.assign({duration:.9},opt));
+      return b;
+    }
+  };
+}

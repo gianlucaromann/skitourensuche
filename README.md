@@ -23,3 +23,6 @@ Grundlagen: Höhenmodell swisstopo (30-m-Raster), Lebensraumkarte Schweiz (BAFU/
 
 ## Couloirs
 `couloirs.html` zeigt recherchierte Couloirs in Graubünden und im Alpstein (Daten in `assets/couloirs.js`, mit Quellenlink pro Eintrag). Marker sitzen auf dem Gipfel (Koordinaten swisstopo). Alle Angaben sind Richtwerte.
+
+## Routen auf der Karte
+`assets/routes.js` enthält pro Tour die Aufstiegsroute (bzw. Abfahrt), berechnet als kürzester Weg vom Startpunkt zum Gipfel entlang des Skitourennetzes der Landeskarte (swisstopo, Layer `ch.swisstopo-karto.skitouren`). Gestrichelt: Verbindung ausserhalb des Netzes. Touren ohne passendes Netz (oder mit unplausiblem Umweg) haben keine Route.

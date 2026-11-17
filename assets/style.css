@@ -370,3 +370,16 @@ body.land{background:#0B2238}
 .cmini span:not(.g){font:400 12px/1.3 Inter,sans-serif;color:#B9C9DA}
 @media (max-width:800px){.cteaser{grid-template-columns:1fr}.csec{padding:22px}}
 @media (max-width:600px){.nav{flex-wrap:wrap;overflow:visible;row-gap:6px}.nav .pill{margin-left:0}.hero{padding-top:168px}.land .hero{padding-top:168px}}
+/* Routen */
+.rinfo{display:flex;flex-direction:column;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid #EDF0F3;font:500 12px/1.35 Inter,sans-serif;color:#2B3A47}
+.rinfo .rdot{display:inline-block;width:14px;height:4px;border-radius:2px;background:#E0B771;margin-right:7px;vertical-align:middle}
+.rinfo .rnone{color:#8A4A06}
+.leaflet-overlay-pane path.rline{stroke-dasharray:20000;stroke-dashoffset:20000;animation:rdraw 1.4s .5s cubic-bezier(.4,.1,.2,1) forwards}
+@keyframes rdraw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.leaflet-overlay-pane path.rline{animation:none;stroke-dashoffset:0}}
+.rpanel{position:absolute;z-index:1000;left:12px;top:60px;width:300px;max-height:calc(100% - 80px);overflow:auto;background:rgba(255,255,255,.97);border-radius:14px;box-shadow:0 14px 40px rgba(5,20,35,.35);padding:16px 16px 14px;color:#13202B;animation:fadeup .25s cubic-bezier(.2,.7,.2,1)}
+.rpanel[hidden]{display:none}
+.rpanel .pop h3{padding-right:28px}
+.rclose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:1px solid #DDE3E9;background:#FFF;font-size:18px;line-height:1;cursor:pointer;color:#4A5A68}
+.rclose:hover{border-color:#C9974A;color:#8A5E1E}
+@media (max-width:699px){.rpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:46%}}
