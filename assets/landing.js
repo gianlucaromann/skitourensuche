@@ -120,7 +120,7 @@ loadLawinen().then(function(){
     var ids=Object.keys(hit);if(!ids.length)return "";
     var top=ids.map(function(k){return hit[k];}).sort(function(x,y){return y.max-x.max;})[0];any=top;
     var d=DANGER[top.max]||{c:"#999",n:"?"};
-    return '<div class="lawcard reveal in" style="--lc:'+d.c+'"><div class="lch">'+lawBadge(top.max)+'<div><b>'+esc(a.n)+'</b><div class="lcl">'+d.n+' · '+(top.ratings||[]).map(function(r){return r.lower?"oberhalb "+hText(r.lower):r.upper?"unterhalb "+hText(r.upper):"";}).filter(Boolean).join(", ")+'</div></div></div>'+
+    return '<div class="lawcard reveal in" style="--lc:'+d.c+'"><div class="lch">'+lawBadge(top.max)+'<div><b>'+esc(a.n)+'</b><div class="lcl">'+d.n+(function(x){return x?' · '+x:'';})((top.ratings||[]).map(function(r){return r.lower?"oberhalb "+hText(r.lower):r.upper?"unterhalb "+hText(r.upper):"";}).filter(Boolean).join(", "))+'</div></div></div>'+
       (top.problems&&top.problems.length?'<div class="lwps">'+probList(top)+'</div>':'')+
       '<small>SLF-Region'+(ids.length>1?'en':'')+': '+ids.map(function(k){return esc(hit[k].name||k);}).join(", ")+(a.c?' · Couloirs':'')+'</small></div>';
   }).join("");
