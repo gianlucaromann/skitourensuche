@@ -111,3 +111,23 @@ function routeTool(map){
     }
   };
 }
+
+/* Hangneigung ab 30° (swisstopo, Klassen gemäss SLF) als zuschaltbare Ebene mit Legende */
+var SLOPE_CLS=[["30–35°","#F2E50A"],["35–40°","#F46F24"],["40–45°","#DE055B"],["45–50°","#C889BB"],["über 50°","#4B4B4B"]];
+function slopeControl(map){
+  var lay=L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.hangneigung-ueber_30/default/current/3857/{z}/{x}/{y}.png",{maxZoom:18,opacity:.6,zIndex:5,attribution:'Hangneigung &copy; <a href="https://www.swisstopo.admin.ch/">swisstopo</a>'});
+  var on=pref("skt-slope")==="1",box,btn,leg,rng;
+  function set(v){on=v;pref("skt-slope",v?"1":"0");if(v)lay.addTo(map);else map.removeLayer(lay);btn.setAttribute("aria-pressed",v);box.classList.toggle("on",v);leg.hidden=!v;}
+  var C=L.Control.extend({options:{position:"topright"},onAdd:function(){
+    box=L.DomUtil.create("div","slopectl leaflet-bar");
+    box.innerHTML='<button type="button" aria-pressed="false" title="Hangneigung ab 30° ein-/ausblenden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20 10 6l4 6 2-3 6 11Z" fill="currentColor"/></svg><span>Hangneigung</span></button>'+
+      '<div class="sleg" hidden><b>Hangneigung</b>'+SLOPE_CLS.map(function(c){return '<span><i style="background:'+c[1]+'"></i>'+c[0]+'</span>';}).join("")+
+      '<label>Deckkraft<input type="range" min="20" max="90" value="60"></label><small>Steilheit ist nicht gleich Lawinengefahr – immer das aktuelle Lawinenbulletin prüfen.</small></div>';
+    btn=box.querySelector("button");leg=box.querySelector(".sleg");rng=box.querySelector("input");
+    L.DomEvent.disableClickPropagation(box);L.DomEvent.disableScrollPropagation(box);
+    btn.addEventListener("click",function(){set(!on);});
+    rng.addEventListener("input",function(){lay.setOpacity(rng.value/100);});
+    return box;}});
+  new C().addTo(map);set(on);
+  return {layer:lay,set:set};
+}

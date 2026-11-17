@@ -386,3 +386,19 @@ body.land{background:#0B2238}
 .ctip{background:#0B2238;color:#FFF;border:1px solid #C9974A;border-radius:8px;font:600 12px/1.2 Inter,sans-serif;padding:4px 8px;box-shadow:0 4px 12px rgba(5,20,35,.35)}
 .ctip::before{display:none}
 .rpanel .pop a[data-go]{font-weight:600}
+/* Hangneigung */
+.slopectl{background:#FFF;border-radius:10px!important;overflow:hidden;font-family:Inter,sans-serif;max-width:220px}
+.slopectl button{display:flex;align-items:center;gap:7px;border:none;background:#FFF;color:#13202B;font:600 13px/1 Inter,sans-serif;padding:9px 11px;cursor:pointer;width:100%}
+.slopectl button svg{width:16px;height:16px;color:#DE055B}
+.slopectl button:hover{background:#F4F6F8}
+.slopectl.on button{background:#0B2238;color:#FFF}
+.slopectl.on button svg{color:#F2E50A}
+.sleg{display:flex;flex-direction:column;gap:5px;padding:10px 12px 12px;font:500 12px/1.2 Inter,sans-serif;color:#2B3A47}
+.sleg[hidden]{display:none}
+.sleg b{font:700 11px/1 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8A5E1E;margin-bottom:2px}
+.sleg span{display:flex;align-items:center;gap:8px}
+.sleg i{width:18px;height:12px;border-radius:3px;display:inline-block}
+.sleg label{display:flex;flex-direction:column;gap:3px;margin-top:4px;font:500 11px/1 Inter,sans-serif;color:#5A6976}
+.sleg input{width:100%;accent-color:#C9974A}
+.sleg small{font:400 10.5px/1.35 Inter,sans-serif;color:#8A4A06;margin-top:2px}
+@media (max-width:600px){.slopectl{max-width:170px}.sleg small{display:none}}

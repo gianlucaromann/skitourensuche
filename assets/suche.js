@@ -60,7 +60,7 @@ var smap=null,slayer=null,marks={},lastSig="",firstFit=true,mapOn=pref("skt-map"
 var RT=null,IP=null;
 document.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
 function initMap(){
-  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);IP=infoPanel(smap,function(){RT.restore();});IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
+  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);slopeControl(smap);IP=infoPanel(smap,function(){RT.restore();});IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
   smap.on("click",function(){smap.scrollWheelZoom.enable();});smap.on("mouseout",function(){smap.scrollWheelZoom.disable();});
 }
 function drawMap(list){

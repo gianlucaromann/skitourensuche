@@ -19,6 +19,7 @@ var map=L.map("map",{scrollWheelZoom:false}).setView([46.8,9.85],10);
 var swiss=swissLayer().addTo(map);
 var osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 L.control.layers({"Landeskarte":swiss,"OpenStreetMap":osm},null,{position:"topright"}).addTo(map);
+slopeControl(map);
 map.on("click",function(){map.scrollWheelZoom.enable();});
 map.on("mouseout",function(){map.scrollWheelZoom.disable();});
 var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();}),mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;

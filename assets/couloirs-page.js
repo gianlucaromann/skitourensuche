@@ -7,7 +7,7 @@ var nReg=C_REGIONS.filter(function(r){return COULOIRS.some(function(c){return c.
 $("cstats").innerHTML=[[COULOIRS.length,"","Couloirs"],[nReg,"","Regionen"],[hiC.hoehe," m","höchster Einstieg: "+esc(hiC.berg)],[stC.steil,"°","steilste Stelle: "+esc(stC.berg)]]
   .map(function(x){return '<div class="statc reveal"><b>'+fmt(x[0])+x[1]+'</b><span>'+x[2]+'</span></div>';}).join("");
 // Karte
-var map=L.map("map",{scrollWheelZoom:false});swissLayer().addTo(map);
+var map=L.map("map",{scrollWheelZoom:false});swissLayer().addTo(map);slopeControl(map);
 var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();});
 IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-go]");if(a){e.preventDefault();goCard(a.dataset.go);}});
 /* Antippen: auf das Couloir zoomen, Einstieg (Gipfel), Zwischenpunkt und Ende markieren – keine Routenlinie */
