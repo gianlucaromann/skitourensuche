@@ -21,7 +21,7 @@ var osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18
 L.control.layers({"Landeskarte":swiss,"OpenStreetMap":osm},null,{position:"topright"}).addTo(map);
 map.on("click",function(){map.scrollWheelZoom.enable();});
 map.on("mouseout",function(){map.scrollWheelZoom.disable();});
-var RT=routeTool(map),IP=infoPanel(map,function(){RT.clear();}),mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;
+var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();}),mode="T",sel=[],onlyPow=false,marks={},tItems=[],hItems=[],pending=0;
 var H0={nMin:34,nMax:45,hMin:200,expos:[]},hs=JSON.parse(JSON.stringify(H0));
 function show(layers,on){layers.forEach(function(l){var el=l.getElement&&l.getElement();if(el)el.classList.toggle("off",!on);if(!on&&l.isPopupOpen&&l.isPopupOpen())l.closePopup();});}
 function fit(pts,o){if(!pts.length)return;if(o&&o.instant)map.fitBounds(pts,{padding:[40,40],maxZoom:o.max||13});else map.flyToBounds(pts,{padding:[40,40],maxZoom:(o&&o.max)||13,duration:.6});}
@@ -56,6 +56,7 @@ function hangPop(h){var t=h.t&&TOURS.filter(function(x){return x.id===h.t;})[0];
     '<dl class="kv" style="font-size:13px"><dt>Höhendifferenz</dt><dd>'+fmt(h.hm)+' Hm</dd><dt>Hangneigung</dt><dd>Ø '+String(h.neig).replace(".",",")+'° (±'+String(h.std).replace(".",",")+'°)</dd><dt>Exposition</dt><dd>'+EXPO_LONG[h.expo]+'</dd><dt>Hanglänge</dt><dd>'+fmt(h.len)+' m</dd><dt>Breite</dt><dd>≥ 40 m</dd><dt>Untergrund</dt><dd>'+h.rasen+' % Rasen'+(h.rasen<100?', '+(100-h.rasen)+' % Geröll':'')+'</dd></dl>'+profSVG(h)+
     (t?'<a href="suche.html?tour='+t.id+'" style="font-weight:600;font-size:13px">Tour '+esc(t.gipfel)+' ansehen →</a>':'')+'</div>';}
 function drawTours(doFit,o){
+  if(doFit){RT.clear();RT.reset();IP.hide();}
   var pts=[],n=0;
   hItems.forEach(function(x){show(x.layers,false);});
   tItems.forEach(function(x){
@@ -68,7 +69,7 @@ function drawTours(doFit,o){
 }
 var hVis=[];
 function drawHangs(doFit,o){
-  var pts=[];hVis=[];RT.clear();IP.hide();
+  var pts=[];hVis=[];RT.clear();RT.reset();IP.hide();
   tItems.forEach(function(x){show(x.layers,false);});
   hItems.forEach(function(x){var h=x.h,on=h.neig>=hs.nMin&&h.neig<=hs.nMax&&h.hm>=hs.hMin&&(!hs.expos.length||hs.expos.indexOf(h.expo)>=0);
     show(x.layers,on);if(on){hVis.push(x);pts.push(h.path[0],h.path[3]);}});

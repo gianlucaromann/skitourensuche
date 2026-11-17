@@ -383,3 +383,6 @@ body.land{background:#0B2238}
 .rclose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:1px solid #DDE3E9;background:#FFF;font-size:18px;line-height:1;cursor:pointer;color:#4A5A68}
 .rclose:hover{border-color:#C9974A;color:#8A5E1E}
 @media (max-width:699px){.rpanel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:46%}}
+.ctip{background:#0B2238;color:#FFF;border:1px solid #C9974A;border-radius:8px;font:600 12px/1.2 Inter,sans-serif;padding:4px 8px;box-shadow:0 4px 12px rgba(5,20,35,.35)}
+.ctip::before{display:none}
+.rpanel .pop a[data-go]{font-weight:600}

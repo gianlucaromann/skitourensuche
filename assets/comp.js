@@ -75,11 +75,25 @@ function infoPanel(map,onClose){
       return w>=700?{tl:[el.offsetWidth+40,40],br:[40,40]}:{tl:[30,30],br:[30,el.offsetHeight+30]};}};
 }
 function routeTool(map){
-  var lay=L.layerGroup().addTo(map),COL=RCOL;
+  var lay=L.layerGroup().addTo(map),COL=RCOL,saved=null;
+  function save(){if(!saved)saved={c:map.getCenter(),z:map.getZoom()};}
+  function fit(b,o){var p=o.pad||{tl:[50,50],br:[50,40]},opt={paddingTopLeft:p.tl,paddingBottomRight:p.br,maxZoom:o.maxZoom||14};
+    if(o.instant)map.fitBounds(b,opt);else map.flyToBounds(b,Object.assign({duration:.9},opt));}
   return {
     clear:function(){lay.clearLayers();},
+    reset:function(){saved=null;},
+    restore:function(){lay.clearLayers();if(saved){map.flyTo(saved.c,saved.z,{duration:.8});saved=null;}},
+    points:function(pts,o){
+      o=o||{};save();lay.clearLayers();var b=L.latLngBounds([pts[0].ll]);
+      pts.forEach(function(p){
+        var mk=L.circleMarker(p.ll,{radius:p.kind==="via"?6:8,color:p.kind==="ende"?"#7FB0E8":"#E0B771",weight:3,fillColor:p.kind==="via"?"#E0B771":"#0B2238",fillOpacity:1,className:"cpt"}).addTo(lay);
+        mk.bindTooltip(esc(p.label),{permanent:true,direction:p.kind==="start"?"top":"bottom",offset:[0,p.kind==="start"?-10:8],className:"ctip"});
+        b.extend(p.ll);
+      });
+      if(pts.length===1)map.flyTo(pts[0].ll,14,{duration:.9});else fit(b,Object.assign({maxZoom:15},o));
+    },
     show:function(g,o){
-      o=o||{};lay.clearLayers();
+      o=o||{};save();lay.clearLayers();
       var b=L.latLngBounds([[g[0].lat,g[0].lon]]);
       g.forEach(function(t,i){
         var r=typeof ROUTES!=="undefined"&&ROUTES[t.id];if(!r)return;
@@ -92,8 +106,7 @@ function routeTool(map){
         L.circleMarker(st,{radius:7,color:c,weight:3,fillColor:"#0B2238",fillOpacity:1}).bindTooltip((desc?"Ziel: ":"Start: ")+esc(desc?t.ziel:t.start),{direction:"top",offset:[0,-6]}).addTo(lay);
         b.extend(line.getBounds());if(r.a)b.extend(r.a);if(r.b)b.extend(r.b);
       });
-      var p=o.pad||{tl:[50,50],br:[50,40]},opt={paddingTopLeft:p.tl,paddingBottomRight:p.br,maxZoom:14};
-      if(o.instant)map.fitBounds(b,opt);else map.flyToBounds(b,Object.assign({duration:.9},opt));
+      fit(b,o);
       return b;
     }
   };

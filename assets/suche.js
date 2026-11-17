@@ -60,7 +60,7 @@ var smap=null,slayer=null,marks={},lastSig="",firstFit=true,mapOn=pref("skt-map"
 var RT=null,IP=null;
 document.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
 function initMap(){
-  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);IP=infoPanel(smap,function(){RT.clear();});
+  smap=L.map("smap",{scrollWheelZoom:false});swissLayer().addTo(smap);slayer=L.layerGroup().addTo(smap);RT=routeTool(smap);IP=infoPanel(smap,function(){RT.restore();});IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-goto]");if(a){e.preventDefault();goTo(a.dataset.goto);}});
   smap.on("click",function(){smap.scrollWheelZoom.enable();});smap.on("mouseout",function(){smap.scrollWheelZoom.disable();});
 }
 function drawMap(list){
@@ -69,7 +69,7 @@ function drawMap(list){
   if(!smap)initMap();
   var sig=list.map(function(t){return t.id;}).sort().join("|");
   if(sig===lastSig)return;lastSig=sig;
-  slayer.clearLayers();marks={};if(RT){RT.clear();IP.hide();}
+  slayer.clearLayers();marks={};if(RT){RT.clear();RT.reset();IP.hide();}
   var groups={},pts=[];
   list.forEach(function(t){var k=t.lat+","+t.lon;(groups[k]=groups[k]||[]).push(t);});
   Object.keys(groups).forEach(function(k){

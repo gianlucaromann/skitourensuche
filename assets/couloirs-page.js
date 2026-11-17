@@ -8,13 +8,22 @@ $("cstats").innerHTML=[[COULOIRS.length,"","Couloirs"],[nReg,"","Regionen"],[hiC
   .map(function(x){return '<div class="statc reveal"><b>'+fmt(x[0])+x[1]+'</b><span>'+x[2]+'</span></div>';}).join("");
 // Karte
 var map=L.map("map",{scrollWheelZoom:false});swissLayer().addTo(map);
+var RT=routeTool(map),IP=infoPanel(map,function(){RT.restore();});
+IP.el.addEventListener("click",function(e){var a=e.target.closest("[data-go]");if(a){e.preventDefault();goCard(a.dataset.go);}});
+/* Antippen: auf das Couloir zoomen, Einstieg (Gipfel), Zwischenpunkt und Ende markieren – keine Routenlinie */
+function focusC(g){
+  var c=g[0],pts=[{ll:[c.lat,c.lon],label:"Einstieg: "+c.berg,kind:"start"}];
+  g.forEach(function(x){if(x.via)pts.push({ll:x.via.ll,label:x.via.n,kind:"via"});if(x.ende&&!pts.some(function(p){return p.label==="Ende: "+x.ende.n;}))pts.push({ll:x.ende.ll,label:"Ende: "+x.ende.n,kind:"ende"});});
+  IP.show(cmarks[c.id]._html);RT.points(pts,{pad:IP.pad()});
+}
 map.on("click",function(){map.scrollWheelZoom.enable();});map.on("mouseout",function(){map.scrollWheelZoom.disable();});
 var groups={};COULOIRS.forEach(function(c){var k=c.lat+","+c.lon;(groups[k]=groups[k]||[]).push(c);});
 Object.keys(groups).forEach(function(k){
   var g=groups[k],c=g[0];
   var html='<div class="pop"><h3>'+esc(c.berg)+'</h3><p class="hh">'+fmt(c.hoehe)+' m ü. M. · '+esc(c.region)+'</p>'+g.map(function(x){
     return '<div class="row"><div><span><b>'+esc(x.name)+'</b></span><span class="g g-'+gfam(x.grad)+'">'+esc(x.grad)+'</span></div><div><span>'+esc(x.neig)+'</span><a href="#c-'+x.id+'" data-go="'+x.id+'">Details →</a></div></div>';}).join("")+'</div>';
-  var m=L.marker([c.lat,c.lon],{title:c.berg,icon:L.divIcon({className:"",iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-17],html:'<span class="pin pin-'+gfam(c.grad)+' pin-c"><i>'+esc(c.grad)+'</i></span>'})}).bindPopup(html,{minWidth:240}).addTo(map);
+  var m=L.marker([c.lat,c.lon],{title:c.berg,icon:L.divIcon({className:"",iconSize:[34,34],iconAnchor:[17,17],html:'<span class="pin pin-'+gfam(c.grad)+' pin-c"><i>'+esc(c.grad)+'</i></span>'})}).addTo(map);
+  m._html=html;m._g=g;m.on("click",function(){focusC(g);});
   g.forEach(function(x){cmarks[x.id]=m;});
 });
 function visible(){return COULOIRS.filter(function(c){return (!cs.regions.length||cs.regions.indexOf(c.region)>=0)&&(!cs.grads.length||cs.grads.indexOf(gfam(c.grad))>=0);});}
@@ -39,7 +48,7 @@ function render(){
   $("cards").innerHTML=list.map(card).join("")||'<p class="none">Kein Couloir passt zu diesen Filtern.</p>';
   Object.keys(cmarks).forEach(function(id){var el=cmarks[id].getElement();if(el)el.classList.toggle("off",!Object.keys(cmarks).some(function(j){return cmarks[j]===cmarks[id]&&ids.indexOf(j)>=0;}));});
 }
-function fly(id){var m=cmarks[id];if(!m)return;$("map").scrollIntoView({behavior:"smooth",block:"center"});map.closePopup();map.once("moveend",function(){m.openPopup();});map.flyTo(m.getLatLng(),13,{duration:1});}
+function fly(id){var m=cmarks[id];if(!m)return;$("map").scrollIntoView({behavior:"smooth",block:"center"});focusC(m._g);}
 function goCard(id){var el=$("c-"+id);if(!el)return;el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");el.scrollIntoView({behavior:"smooth",block:"center"});}
 $("cards").addEventListener("click",function(e){var b=e.target.closest("[data-fly]");if(b)fly(b.dataset.fly);});
 document.addEventListener("click",function(e){var a=e.target.closest("[data-go]");if(a){e.preventDefault();goCard(a.dataset.go);}});
