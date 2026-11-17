@@ -98,3 +98,8 @@ $("toExplorer").onclick=function(){setMode("H");$("karte").scrollIntoView({behav
 draw(true,{instant:true});
 var qt=new URLSearchParams(location.search).get("tour");
 if(qt&&marks[qt]){map.setView(marks[qt].getLatLng(),13);marks[qt].openPopup();}
+/* Teaser: Couloirs */
+if(typeof COULOIRS!=="undefined"&&$("cMini")){
+  $("cMini").innerHTML=COULOIRS.slice().sort(function(a,b){return b.hoehe-a.hoehe;}).slice(0,5).map(function(c){
+    return '<li><a href="couloirs.html#c-'+c.id+'"><span class="g g-'+c.grad.replace(/[+-]/g,"")+'">'+esc(c.grad)+'</span><b>'+esc(c.berg)+'</b><span>'+esc(c.name)+' · '+esc(c.region)+'</span></a></li>';}).join("");
+}

@@ -20,3 +20,6 @@ Grundlagen: Höhenmodell swisstopo (30-m-Raster), Lebensraumkarte Schweiz (BAFU/
 ## Interaktive Funktionen
 - Startseite: Karte mit Touren-Ansicht und Powder-Explorer (Regler für Hangneigung und Höhendifferenz, Kompassrose für die Exposition), Zufallstour
 - Suche: Karte passt sich den Filtern an, Hangprofil in den Details, Merkliste (nur lokal im Browser), Filter stehen in der Adresse und lassen sich als Link teilen
+
+## Couloirs
+`couloirs.html` zeigt recherchierte Couloirs in Graubünden und im Alpstein (Daten in `assets/couloirs.js`, mit Quellenlink pro Eintrag). Marker sitzen auf dem Gipfel (Koordinaten swisstopo). Alle Angaben sind Richtwerte.

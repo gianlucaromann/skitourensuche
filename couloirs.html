@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Couloirs – Skitouren-Suche</title>
+<meta name="description" content="Steile Couloirs in Graubünden und im Alpstein: Corvatsch, Piz Buin, Säntis, Altmann und mehr – mit Karte und Eckdaten.">
+<link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0B2238">
+<meta name="apple-mobile-web-app-title" content="Skitouren">
+<meta name="application-name" content="Skitouren">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://wmts.geo.admin.ch">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="assets/style.css?v=20261114b">
+</head>
+<body class="land">
+<div class="sky" aria-hidden="true"></div>
+<div style="min-height:100vh;font-family:Inter,sans-serif;color:#13202B">
+  <div class="topbar">
+    <div class="brand">
+        <a href="index.html" aria-label="Startseite" style="display:flex"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#0F2A44" stroke="#C9974A" stroke-width="2.5"/><path d="M7 33 18 15l6 9 5-6 12 15Z" fill="#DCE6F2"/><path d="m18 15 4 6.2-2.4-.8-2 2.2-1.8-1.6-2 .8Z" fill="#fff"/><path d="m29 18 3.6 4.3-2.1-.5-1.6 1.4-1.4-1.3Z" fill="#fff"/><path d="M11 38.5 37 31M13 41.5 39 34" stroke="#C9974A" stroke-width="2.4" stroke-linecap="round"/></svg></a>
+        <a href="index.html" style="display:flex;align-items:center;gap:12px;color:#FFF;text-decoration:none"><span class="wordmark">Skitouren<span>·</span>Suche</span></a>
+        <nav class="nav" aria-label="Hauptnavigation"><a href="index.html">Karte</a><a href="suche.html">Touren suchen</a><a href="couloirs.html" aria-current="page">Couloirs</a><a href="datenschutz.html" class="pill">Pilot-Schulprojekt</a></nav>
+    </div>
+  </div>
+  <header class="hero">
+    <div class="hero-in">
+      <div style="font:500 13px/1.5 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#E0B771">Graubünden · Alpstein · Silvretta</div>
+      <h1 style="margin:0;font:700 52px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.02em">Steile Couloirs</h1>
+      <p class="lead">Enge Rinnen zwischen Fels, Einstiege um 45° und lange Abfahrten: die spannendsten Couloirs vom Säntis bis zum Corvatsch – mit Karte, Eckdaten und Quellen.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px"><a class="cta" href="#liste">Couloirs ansehen</a><a class="cta ghost" href="#karte">Zur Karte</a></div>
+    </div>
+    <svg class="range2" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="gB" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="410"><stop offset="0" stop-color="#93B5DB" stop-opacity=".62"/><stop offset=".6" stop-color="#6F95C0" stop-opacity=".28"/><stop offset="1" stop-color="#6F95C0" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gF" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="418"><stop offset="0" stop-color="#4A82BD"/><stop offset=".55" stop-color="#2F629A" stop-opacity=".9"/><stop offset="1" stop-color="#2A5788" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gR" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="418"><stop offset="0" stop-color="#1D436C"/><stop offset=".6" stop-color="#17375A" stop-opacity=".92"/><stop offset="1" stop-color="#17375A" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gC" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="400"><stop offset="0" stop-color="#F4F8FC"/><stop offset=".7" stop-color="#C9DBEE" stop-opacity=".75"/><stop offset="1" stop-color="#C9DBEE" stop-opacity="0"/></linearGradient>
+        <radialGradient id="gM"><stop offset="0" stop-color="#E0B771" stop-opacity=".5"/><stop offset="1" stop-color="#E0B771" stop-opacity="0"/></radialGradient>
+        <mask id="hm" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="420"><path class="hmask" pathLength="1" d="M1061 76 1052 115 1045 150 1037 185 1031 220 1022 255 1017 290 1009 325 1003 360" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"/></mask>
+      </defs>
+      <g class="r-sun"><circle cx="1250" cy="70" r="70" fill="url(#gM)"/><circle cx="1250" cy="70" r="20" fill="#E0B771"/></g>
+      <g class="r-back">
+        <path d="M-90 300 60 250l110 35 160-80 110 45 120-35 140 40 160-135 100 55 100-80 110 55 130-90 100 60 120-30V420H-90Z" fill="url(#gB)"/>
+      </g>
+      <g class="r-front">
+        <path d="M-90 340 90 290l120 30 170-75 140 55 130-30 130 40 300-270 120 110 70-30 110 90 140-40V420H-90Z" fill="url(#gF)"/>
+        <path d="M1080 40 1048 78 1036 118 1028 160 1018 200 1010 240 1000 280 992 320 984 360 980 420H760L780 310Z" fill="url(#gR)"/>
+        <path d="M1080 40 1094 70 1078 100 1070 140 1062 182 1054 222 1046 262 1038 302 1030 342 1026 420H1110L1200 150Z" fill="url(#gR)" opacity=".55"/>
+        <path d="M1048 78 1074 74 1078 100 1070 140 1062 182 1054 222 1046 262 1038 302 1030 342 1026 400 984 400 984 360 992 320 1000 280 1010 240 1018 200 1028 160 1036 118Z" fill="url(#gC)"/>
+        <path d="M900 250l20-12 6 18-14 6Z M940 200l16-10 4 14-12 4Z M1120 200l14-6 6 14-12 6Z M1150 260l18-8 4 16-14 4Z" fill="#12304F" opacity=".7"/>
+        <path d="M-90 340 90 290l120 30 170-75 140 55 130-30 130 40 300-270 120 110 70-30 110 90 140-40" fill="none" stroke="#B4CEEA" stroke-opacity=".6" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M1080 40l18 20-10-1-8 9-8-8-10 6-12-4Z M380 245l51 20-13-2-12 9-12-8-12 9-14-8-33 0Z M1270 120l24 20-10-2-8 8-10-7-10 5-9-4Z" fill="#F4F8FC"/>
+        <path d="M1061 76 1052 115 1045 150 1037 185 1031 220 1022 255 1017 290 1009 325 1003 360" fill="none" stroke="#E0B771" stroke-width="2.8" stroke-dasharray="5 6" stroke-linecap="round" mask="url(#hm)"/>
+        <circle class="summit" cx="1061" cy="76" r="4" fill="#E0B771"/>
+      </g>
+    </svg>
+  </header>
+  <main class="wrap">
+    <div class="stats" id="cstats"></div>
+    <div class="cwarn reveal"><b>Couloirs sind ernstes Gelände.</b> Steile, enge Rinnen bündeln Lawinen und Steinschlag, oft mit Wächten am Einstieg. Nur bei sicheren Verhältnissen, mit Lawinenausrüstung, Pickel und Steigeisen – im Zweifel mit Bergführer. Alle Angaben sind recherchierte Richtwerte; aktuelles <a href="https://www.slf.ch/de/lawinenbulletin-und-schneesituation/" target="_blank" rel="noopener">SLF-Lawinenbulletin</a> prüfen.</div>
+    <section class="sect" id="karte">
+      <span class="eyebrow">Interaktive Karte</span>
+      <h2>Couloirs auf der Karte</h2>
+      <p>Die Marker sitzen auf dem Gipfel (Koordinaten: swisstopo), die Farbe zeigt die Schwierigkeit. Klicke auf einen Gipfel für die Couloirs.</p>
+      <div id="map" role="region" aria-label="Karte der Couloirs"></div>
+    </section>
+    <section class="sect" id="liste">
+      <span class="eyebrow">Übersicht</span>
+      <h2>Alle Couloirs</h2>
+      <div class="cfilter"><div><span class="exh">Region</span><div class="chips" id="cReg"></div></div><div><span class="exh">Schwierigkeit</span><div class="chips" id="cGrad"></div></div></div>
+      <p class="mapinfo"><strong id="cCount"></strong> Couloirs angezeigt</p>
+      <div class="cgrid" id="cards"></div>
+    </section>
+  </main>
+  <footer class="foot">
+    <div class="foot-in">
+      <span class="wordmark" style="font-size:18px">Skitouren<span>·</span>Suche</span>
+      <span>Graubünden · Alpstein</span>
+      <a href="datenschutz.html">Pilot-Schulprojekt</a>
+    </div>
+  </footer>
+</div>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="assets/tours.js?v=20261117"></script>
+<script src="assets/couloirs.js?v=20261117"></script>
+<script src="assets/comp.js?v=20261117"></script>
+<script src="assets/couloirs-page.js?v=20261117"></script>
+<script src="assets/ui.js?v=20261117"></script>
+</body>
+</html>
